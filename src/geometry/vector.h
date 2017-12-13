@@ -18,12 +18,73 @@
  * SOFTWARE.
  */
 
-class Vector {
- public:
-  Vector(int x, int y);
+#include <vector>
 
- protected:
-  int x;
-  int y;
+//! A class for geometrical floating-point based vectors and their operations
+class Victor
+{
+  public:
+    /////////////// Constructors
+    
+    //! Construct a 2d Vector from coordinates
+    Victor(float x, float y);
+    
+    //! Construct a 3d Vector from coordinates
+    Victor(float x, float y, float z);
+    
+    //! Copy constructor
+    Victor(const Victor &other);
 
+    /////////////// Destructor
+    //! Flush and clean the std::vector containing coordinates
+    ~Victor();
+
+    /////////////// Simple accessors
+    //! Return true if the Victor is 2 dimensional
+    inline bool
+    is_2d(void)
+    {
+        return d == 2;
+    }
+
+    /////////////// Convenience methods
+     
+    //! Return the p-norm distance (default 2) to another Victor
+    /*! The method should throw an error if the dimensions are not compatible
+     */
+    float p_distance(const Victor &other, int p = 2) const;
+    
+    //! Return the p-norm distance (default 2) between 2 Victors
+    /*! Call the p_distance method under the hood
+     */
+    inline friend float
+    p_distance(const Victor &first, const Victor &second, int p = 2)
+    {
+        return first.p_distance(second, p);
+    }
+    
+    //! Return the p-norm (default 2) of the Victor
+    float p_norm(int p = 2) const;
+    
+    //! Normalize the Victor according to p_norm (default 2)
+    inline void
+    p_normalize(int p = 2)
+    {
+        *this *= this->p_norm(p);
+    }
+
+    // Operations
+    Victor operator+(const Victor &rhs);
+    Victor operator-(const Victor &rhs);
+    Victor operator=(const Victor &rhs);
+    Victor operator[](int zero_based_coordinate);
+    Victor operator*=(float coef);
+    Victor operator/=(float coef);
+    Victor operator+=(const Victor &rhs);
+    Victor operator-=(const Victor &rhs);
+    friend Victor operator*(float coef, const Victor &rhs);
+
+  protected:
+    int d;
+    std::vector<float> coord;
 };
