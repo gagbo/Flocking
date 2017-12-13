@@ -20,6 +20,7 @@
 
 #include "victor.h"
 
+#include <cmath>
 #include <iostream>
 
 Victor::Victor(int dim) : d(dim)
@@ -53,6 +54,29 @@ Victor::Victor(const Victor &other)
 Victor::~Victor()
 {
     coord.clear();
+}
+
+float
+Victor::p_distance(const Victor &other, int p) const
+{
+    int dim = d;
+    if (d != other.d) {
+        std::cerr << "Distance : not compatible dimension -> cropped at d=2";
+        dim = 2;
+    }
+    double norm = 0; // double because of the exponentiation
+
+    for (int i = 0; i < d; ++i) {
+        norm += std::pow((coord[i] - other[i]), p);
+    }
+
+    return std::pow(norm, 1.0 / p);
+}
+
+float
+Victor::p_norm(int p) const
+{
+    return p_distance(Victor(d), p);
 }
 
 Victor
