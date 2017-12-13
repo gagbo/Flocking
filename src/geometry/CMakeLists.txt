@@ -1,5 +1,5 @@
 include_directories (.)
-add_library (geometry vector.cpp)
+add_library (geometry victor.cpp)
 
 install (TARGETS geometry DESTINATION bin)
-install (FILES vector.h DESTINATION include)
+install (FILES victor.h DESTINATION include)

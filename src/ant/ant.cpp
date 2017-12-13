@@ -19,3 +19,13 @@
  */
 
 #include "ant.h"
+
+Ant::Ant(int dim)
+{
+    position = Victor(dim);
+    velocity_int = Victor(dim);
+    accel_int = Victor(dim);
+    mass = 0;
+    friction = 0;
+    max_force = 0;
+}

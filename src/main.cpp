@@ -21,6 +21,7 @@
 #include <iostream>
 
 #include "FlockingConfig.h"
+#include "ant.h"
 
 int
 main(int argc, char *argv[])
@@ -33,5 +34,7 @@ main(int argc, char *argv[])
 
         return 1;
     }
+    
+    Ant test_ant;
     return 0;
 }

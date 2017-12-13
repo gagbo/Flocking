@@ -18,13 +18,45 @@
  * SOFTWARE.
  */
 
-#include "vector.h"
+#ifndef _ANT_ANT_H_
+#define _ANT_ANT_H_
+
+#include "victor.h"
 
 class Ant
 {
+  public:
+    /////////////// Constructors
+      
+    //! Construct a new Ant to move in d dimensions (default 2)
+    Ant(int dim = 2);
+    
+    //! Update the position and velocity of ant, reset acceleration
+    /*! Also where friction and/or mass and/or other members can be updated
+     * based on the new position
+     */
+    void update(void);
+    
+    //! Return the steering force needed to reach target, limited by max_force
+    /*! target should be the position of the target
+     * the method will then compute the difference (Ant -> target)
+     * and compute the acceleration Victor to reach it.
+     */
+    Victor steer_to_capped(const Victor& target);
+    
+    //! Return the steering force needed to reach target
+    /*! target should be the position of the target
+     * the method will then compute the difference (Ant -> target)
+     * and compute the acceleration Victor to reach it.
+     */
+    Victor steer_to(const Victor& target);
+
   protected:
     Victor position;
-    Victor velocity;
-    Victor acceleration;
+    Victor velocity_int; //!< Velocity integrated over engine tick
+    Victor accel_int;    //!< Acceleration integrated over engine tick
     float mass;
+    float friction;
+    float max_force;
 };
+#endif  // _ANT_ANT_H_

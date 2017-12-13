@@ -15,7 +15,9 @@ configure_file (
 # so that we will find FlockingConfig.h
 include_directories ("${PROJECT_BINARY_DIR}")
 add_subdirectory (ant)
+include_directories ("ant")
 add_subdirectory (geometry)
+include_directories ("geometry")
 
 add_executable (flocks main.cpp)
 target_link_libraries (flocks ant)

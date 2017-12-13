@@ -18,6 +18,9 @@
  * SOFTWARE.
  */
 
+#ifndef _GEOMETRY_VICTOR_H_
+#define _GEOMETRY_VICTOR_H_
+
 #include <vector>
 
 //! A class for geometrical floating-point based vectors and their operations
@@ -25,13 +28,16 @@ class Victor
 {
   public:
     /////////////// Constructors
-    
+
+    //! Construct a NULL vector of dimension d (default constructor, dim 2)
+    Victor(int d = 2);
+
     //! Construct a 2d Vector from coordinates
     Victor(float x, float y);
-    
+
     //! Construct a 3d Vector from coordinates
     Victor(float x, float y, float z);
-    
+
     //! Copy constructor
     Victor(const Victor &other);
 
@@ -42,18 +48,18 @@ class Victor
     /////////////// Simple accessors
     //! Return true if the Victor is 2 dimensional
     inline bool
-    is_2d(void)
+    is_2d(void) const
     {
         return d == 2;
     }
 
     /////////////// Convenience methods
-     
+
     //! Return the p-norm distance (default 2) to another Victor
     /*! The method should throw an error if the dimensions are not compatible
      */
     float p_distance(const Victor &other, int p = 2) const;
-    
+
     //! Return the p-norm distance (default 2) between 2 Victors
     /*! Call the p_distance method under the hood
      */
@@ -62,10 +68,10 @@ class Victor
     {
         return first.p_distance(second, p);
     }
-    
+
     //! Return the p-norm (default 2) of the Victor
     float p_norm(int p = 2) const;
-    
+
     //! Normalize the Victor according to p_norm (default 2)
     inline void
     p_normalize(int p = 2)
@@ -77,14 +83,16 @@ class Victor
     Victor operator+(const Victor &rhs);
     Victor operator-(const Victor &rhs);
     Victor operator=(const Victor &rhs);
-    Victor operator[](int zero_based_coordinate);
-    Victor operator*=(float coef);
-    Victor operator/=(float coef);
-    Victor operator+=(const Victor &rhs);
-    Victor operator-=(const Victor &rhs);
+    float& operator[](int zero_based_coordinate);
+    const float& operator[](int zero_based_coordinate) const;
+    void operator*=(float coef);
+    void operator/=(float coef);
+    void operator+=(const Victor &rhs);
+    void operator-=(const Victor &rhs);
     friend Victor operator*(float coef, const Victor &rhs);
 
   protected:
     int d;
     std::vector<float> coord;
 };
+#endif  // _GEOMETRY_VICTOR_H_
