@@ -20,12 +20,71 @@
 
 #include "ant.h"
 
+#include <limits>
+
+uint Ant::next_id = 0;
+uint Ant::count_alive = 0;
+
 Ant::Ant(int dim)
 {
+    id = Ant::next_id++;
+    Ant::count_alive++;
     position = Victor(dim);
-    velocity_int = Victor(dim);
-    accel_int = Victor(dim);
-    mass = 0;
+    velocity = Victor(dim);
+    accel = Victor(dim);
+    mass = 1;
     friction = 0;
-    max_force = 0;
+    max_force = std::numeric_limits<float>::max();
+}
+
+Ant::~Ant()
+{
+    Ant::count_alive--;
+}
+
+std::ostream &
+operator<<(std::ostream &os, const Ant &ant)
+{
+    os << "Ant " << ant.id << " ( Mass = " << ant.mass
+       << " ; Friction = " << ant.friction << " ; Max Force = " << ant.max_force
+       << " )\n"
+       << "Position    \t" << ant.position << "\n"
+       << "Velocity    \t" << ant.velocity << "\n"
+       << "Acceleration\t" << ant.accel << "\n";
+
+    return os;
+}
+
+void
+Ant::update(float dt)
+{
+    // accel = capped_accel_to(target, dt);
+    // accel = capped_accel_towards(direction, dt);
+    velocity += dt * accel;
+    velocity *= (1.0 - friction);
+    position += dt * velocity;
+    accel.zero();
+}
+
+Victor
+Ant::accel_to(const Victor &target, float delay) const
+{
+    Victor desired_velocity = target - position;
+    desired_velocity /= delay;
+    Victor desired_accel = desired_velocity;
+    desired_accel /= delay;
+
+    return desired_accel;
+}
+
+Victor
+Ant::capped_accel_to(const Victor &target, float delay) const
+{
+    Victor desired_accel = accel_to(target, delay);
+    if (mass * desired_accel.p_norm() > max_force) {
+        desired_accel.p_normalize();
+        desired_accel *= max_force / mass;
+    }
+
+    return desired_accel;
 }

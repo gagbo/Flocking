@@ -21,6 +21,7 @@
 #ifndef _GEOMETRY_VICTOR_H_
 #define _GEOMETRY_VICTOR_H_
 
+#include <iostream>
 #include <vector>
 
 //! A class for geometrical floating-point based vectors and their operations
@@ -76,23 +77,33 @@ class Victor
     inline void
     p_normalize(int p = 2)
     {
-        *this *= this->p_norm(p);
+        *this /= this->p_norm(p);
+    }
+
+    //! Put all values of Victor to 0
+    inline void
+    zero(void)
+    {
+        for (int i = 0; i < d; ++i) {
+            coord[i] = 0;
+        }
     }
 
     // Operations
-    Victor operator+(const Victor &rhs);
-    Victor operator-(const Victor &rhs);
-    Victor operator=(const Victor &rhs);
-    float& operator[](int zero_based_coordinate);
-    const float& operator[](int zero_based_coordinate) const;
+    Victor operator+(const Victor &rhs) const;
+    Victor operator-(const Victor &rhs) const;
+    Victor operator=(const Victor &rhs) const;
+    float &operator[](int zero_based_coordinate);
+    const float &operator[](int zero_based_coordinate) const;
     void operator*=(float coef);
     void operator/=(float coef);
     void operator+=(const Victor &rhs);
     void operator-=(const Victor &rhs);
     friend Victor operator*(float coef, const Victor &rhs);
+    friend std::ostream &operator<<(std::ostream &os, const Victor &v);
 
   protected:
     int d;
     std::vector<float> coord;
 };
-#endif  // _GEOMETRY_VICTOR_H_
+#endif // _GEOMETRY_VICTOR_H_

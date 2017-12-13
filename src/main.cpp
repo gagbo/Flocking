@@ -34,7 +34,8 @@ main(int argc, char *argv[])
 
         return 1;
     }
-    
+
     Ant test_ant;
+    std::cout << test_ant << std::endl;
     return 0;
 }

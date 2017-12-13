@@ -23,40 +23,80 @@
 
 #include "victor.h"
 
+#include <iostream>
+
 class Ant
 {
   public:
+    static uint next_id;     //!< Id to use for the next created Ant
+    static uint count_alive; //!< Counts the number of Ant currently allocated
     /////////////// Constructors
-      
+
     //! Construct a new Ant to move in d dimensions (default 2)
     Ant(int dim = 2);
-    
+
+    /////////////// Destructor
+    ~Ant();
+
+    /////////////// Methods
+
     //! Update the position and velocity of ant, reset acceleration
     /*! Also where friction and/or mass and/or other members can be updated
      * based on the new position
      */
-    void update(void);
-    
-    //! Return the steering force needed to reach target, limited by max_force
-    /*! target should be the position of the target
+    void update(float dt = 1);
+
+    //! Return the capped accel needed to reach target in delay s
+    /*! \param target should be the position of the target
      * the method will then compute the difference (Ant -> target)
      * and compute the acceleration Victor to reach it.
+     * \param delay is the time in which we want to reach target.
+     * it should be equal to the engine's time step
      */
-    Victor steer_to_capped(const Victor& target);
-    
-    //! Return the steering force needed to reach target
-    /*! target should be the position of the target
+    Victor capped_accel_to(const Victor &target, float delay = 1) const;
+
+    //! Return the capped accel needed to reach target velocity in delay seconds
+    /*! \param target_velocity is the velocity we want to reach
+     * \param delay is the time in which we want to reach target velocity
+     * it should be equal to the engine's time step
+     */
+    inline Victor
+    capped_accel_towards(const Victor &target_velocity, float delay = 1)
+    {
+        Victor fake_target = position + delay * target_velocity;
+        return capped_accel_to(fake_target, delay);
+    }
+
+    //! Return the acceleration needed to reach target in delay seconds
+    /*! \param target should be the position of the target
      * the method will then compute the difference (Ant -> target)
      * and compute the acceleration Victor to reach it.
+     * \param delay is the time in which we want to reach target
+     * it should be equal to the engine's time step
      */
-    Victor steer_to(const Victor& target);
+    Victor accel_to(const Victor &target, float delay = 1) const;
+
+    //! Return the acceleration needed to reach target velocity in delay seconds
+    /*! \param target_velocity is the velocity we want to reach
+     * \param delay is the time in which we want to reach target velocity
+     * it should be equal to the engine's time step
+     */
+    inline Victor
+    accel_towards(const Victor &target_velocity, float delay = 1)
+    {
+        Victor fake_target = position + delay * target_velocity;
+        return accel_to(fake_target, delay);
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Ant &ant);
 
   protected:
-    Victor position;
-    Victor velocity_int; //!< Velocity integrated over engine tick
-    Victor accel_int;    //!< Acceleration integrated over engine tick
+    int id;
+    Victor position; //!< Position
+    Victor velocity; //!< Velocity
+    Victor accel;    //!< Acceleration
     float mass;
     float friction;
     float max_force;
 };
-#endif  // _ANT_ANT_H_
+#endif // _ANT_ANT_H_

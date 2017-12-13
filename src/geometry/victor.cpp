@@ -21,7 +21,6 @@
 #include "victor.h"
 
 #include <cmath>
-#include <iostream>
 
 Victor::Victor(int dim) : d(dim)
 {
@@ -61,7 +60,7 @@ Victor::p_distance(const Victor &other, int p) const
 {
     int dim = d;
     if (d != other.d) {
-        std::cerr << "Distance : not compatible dimension -> cropped at d=2";
+        std::cerr << "Distance : not compatible dimension -> cropped at d=2\n";
         dim = 2;
     }
     double norm = 0; // double because of the exponentiation
@@ -80,7 +79,7 @@ Victor::p_norm(int p) const
 }
 
 Victor
-Victor::operator+(const Victor &rhs)
+Victor::operator+(const Victor &rhs) const
 {
     if (rhs.d != d) {
         std::cerr
@@ -95,7 +94,7 @@ Victor::operator+(const Victor &rhs)
 }
 
 Victor
-Victor::operator-(const Victor &rhs)
+Victor::operator-(const Victor &rhs) const
 {
     if (rhs.d != d) {
         std::cerr << "Victor substraction : not compatible dimensions -> NULL "
@@ -110,7 +109,7 @@ Victor::operator-(const Victor &rhs)
 }
 
 Victor
-Victor::operator=(const Victor &rhs)
+Victor::operator=(const Victor &rhs) const
 {
     return Victor(rhs);
 }
@@ -176,4 +175,14 @@ Victor operator*(float coef, const Victor &rhs)
         result[i] = coef * rhs[i];
     }
     return result;
+}
+
+std::ostream &
+operator<<(std::ostream &os, const Victor &v)
+{
+    for (int i = 0; i < v.d - 1; ++i) {
+        os << v[i] << "\t";
+    }
+    os << v[v.d - 1];
+    return os;
 }
