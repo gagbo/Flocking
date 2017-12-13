@@ -20,12 +20,11 @@
 
 #include "vector.h"
 
-class Ant {
-
- protected:
-  Vector position;
-  Vector velocity;
-  Vector acceleration;
-  float mass;
-
+class Ant
+{
+  protected:
+    Victor position;
+    Victor velocity;
+    Victor acceleration;
+    float mass;
 };

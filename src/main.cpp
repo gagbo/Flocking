@@ -22,14 +22,16 @@
 
 #include "FlockingConfig.h"
 
-int main(int argc, char *argv[]) {
-  if (argc < 3) {
-    std::cout << argv[0] << " Version " << Flocking_VERSION_MAJOR << "."
-              << Flocking_VERSION_MINOR << "\n";
+int
+main(int argc, char *argv[])
+{
+    if (argc < 3) {
+        std::cout << argv[0] << " Version " << Flocking_VERSION_MAJOR << "."
+                  << Flocking_VERSION_MINOR << "\n";
 
-    std::cout << "Usage : " << argv[0] << " width height\n";
+        std::cout << "Usage : " << argv[0] << " width height\n";
 
-    return 1;
-  }
-  return 0;
+        return 1;
+    }
+    return 0;
 }
