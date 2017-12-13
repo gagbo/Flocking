@@ -18,9 +18,13 @@ add_subdirectory (ant)
 include_directories ("ant")
 add_subdirectory (geometry)
 include_directories ("geometry")
+add_subdirectory (ui)
+include_directories ("ui")
+add_subdirectory (engine)
+include_directories ("engine")
 
 add_executable (flocks main.cpp)
-target_link_libraries (flocks ant)
+target_link_libraries (flocks ant engine ui)
 
 install (TARGETS flocks DESTINATION bin)
 install (FILES "${PROJECT_BINARY_DIR}/FlockingConfig.h"

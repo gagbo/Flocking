@@ -91,12 +91,12 @@ class Ant
     friend std::ostream &operator<<(std::ostream &os, const Ant &ant);
 
   protected:
-    int id;
+    int id;          //!< Global Ant Id
     Victor position; //!< Position
     Victor velocity; //!< Velocity
     Victor accel;    //!< Acceleration
-    float mass;
-    float friction;
-    float max_force;
+    float mass;      //!< Mass of the Ant
+    float friction;  //!< Friction seen by the ant
+    float max_force; //!< Maximum force the Ant can apply to move itself
 };
 #endif // _ANT_ANT_H_
