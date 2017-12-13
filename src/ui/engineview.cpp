@@ -18,8 +18,34 @@
  * SOFTWARE.
  */
 
-#ifndef _ENGINE_ENGINE_H_
-#define _ENGINE_ENGINE_H_
+#include "engineview.h"
+#include <QtGui/QPainter>
+#include <QtWidgets>
+#include <QGraphicsScene>
 
+EngineView::EngineView()
+{
+    ant_engine = new EngineAntScene(2);
+    setScene(ant_engine);
+    ant_engine->add_ant(Victor(30, 90));
+    
+    setRenderHint(QPainter::Antialiasing);
+    setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
+    setDragMode(QGraphicsView::ScrollHandDrag);
 
-#endif // _ENGINE_ENGINE_H_
+    background = QBrush(QColor(64, 32, 64));
+    setBackgroundBrush(background);
+}
+
+EngineView::~EngineView()
+{
+    delete ant_engine;
+}
+
+void
+EngineView::set_engine(float width, float height, float time_step)
+{
+    ant_engine->set_wid(width);
+    ant_engine->set_hei(height);
+    ant_engine->set_dt(time_step);
+}

@@ -18,24 +18,42 @@
  * SOFTWARE.
  */
 
+#include <QApplication>
+#include <QCommandLineOption>
+#include <QCommandLineParser>
+#include <QtWidgets>
 #include <iostream>
 
 #include "FlockingConfig.h"
 #include "ant.h"
+#include "mainwindow.h"
 
 int
 main(int argc, char *argv[])
 {
-    if (argc < 3) {
-        std::cout << argv[0] << " Version " << Flocking_VERSION_MAJOR << "."
-                  << Flocking_VERSION_MINOR << "\n";
+    std::cout << argv[0] << " Version " << Flocking_VERSION_MAJOR << "."
+              << Flocking_VERSION_MINOR << std::endl;
 
-        std::cout << "Usage : " << argv[0] << " width height\n";
+    QApplication app(argc, argv);
+    QCoreApplication::setOrganizationName("Gerry A");
+    QCoreApplication::setApplicationName("Flocking Autonomous Agents");
+    QCoreApplication::setApplicationVersion(QT_VERSION_STR);
+    QCommandLineParser parser;
+    parser.setApplicationDescription(QCoreApplication::applicationName());
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addPositionalArgument("width",
+                                 "The width of the visualization panel");
+    parser.addPositionalArgument("height",
+                                 "The height of the visualization panel");
+    parser.addPositionalArgument("time_step", "The time step of the engine");
+    parser.process(app);
 
-        return 1;
-    }
-
-    Ant test_ant;
-    std::cout << test_ant << std::endl;
-    return 0;
+    MainWindow mainWin;
+    mainWin.show();
+    
+    QTimer timer;
+    QObject::connect(&timer, SIGNAL(timeout()), mainWin.getScene(), SLOT(advance()));
+    timer.start(1000 / 33);
+    return app.exec();
 }

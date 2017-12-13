@@ -24,8 +24,9 @@
 #include "victor.h"
 
 #include <iostream>
+#include <QGraphicsItem>
 
-class Ant
+class Ant : public QGraphicsItem
 {
   public:
     static uint next_id;     //!< Id to use for the next created Ant
@@ -35,16 +36,32 @@ class Ant
     //! Construct a new Ant to move in d dimensions (default 2)
     Ant(int dim = 2);
 
+    //! Construct a new Ant at position
+    Ant(const Victor &position);
+
     /////////////// Destructor
     ~Ant();
 
     /////////////// Methods
+
+    //! Give an approximate bounding rectangle for the Ant
+    QRectF boundingRect() const override;
+
+    //! Give the shape of the Ant for collision detection
+    QPainterPath shape() const override;
+
+    //! Paint an Ant
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+               QWidget *widget) override;
 
     //! Update the position and velocity of ant, reset acceleration
     /*! Also where friction and/or mass and/or other members can be updated
      * based on the new position
      */
     void update(float dt = 1);
+
+    //! Decide where to go. Set acceleration properly to prepare for update
+    void decision(float width, float height, float dt);
 
     //! Return the capped accel needed to reach target in delay s
     /*! \param target should be the position of the target
@@ -88,9 +105,29 @@ class Ant
         return accel_to(fake_target, delay);
     }
 
+    inline float
+    x() const
+    {
+        return position[0];
+    }
+    inline float
+    y() const
+    {
+        return position[1];
+    }
+    inline float
+    z() const
+    {
+        return position.is_2d() ? 0.0 : position[2];
+    }
+    
+    inline void
+    set_dt(float dt) { time_step = dt; }
+
     friend std::ostream &operator<<(std::ostream &os, const Ant &ant);
 
   protected:
+    void advance(int step) override;
     int id;          //!< Global Ant Id
     Victor position; //!< Position
     Victor velocity; //!< Velocity
@@ -98,5 +135,7 @@ class Ant
     float mass;      //!< Mass of the Ant
     float friction;  //!< Friction seen by the ant
     float max_force; //!< Maximum force the Ant can apply to move itself
+    QColor color;    //!< Color
+    float time_step; //!< Time step given from the engine
 };
 #endif // _ANT_ANT_H_

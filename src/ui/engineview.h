@@ -18,4 +18,34 @@
  * SOFTWARE.
  */
 
-#include "engine.h"
+#ifndef _UI_ENGINEVIEW_H_
+#define _UI_ENGINEVIEW_H_
+
+#include "ant.h"
+#include "engineantscene.h"
+#include <iostream>
+#include <QGraphicsView>
+
+class QPaintEvent;
+
+class EngineView : public QGraphicsView
+{
+    Q_OBJECT
+
+  public:
+    EngineView();
+    virtual ~EngineView();
+
+    void set_engine(float width, float height, float time_step);
+    inline EngineAntScene* getScene() const { return ant_engine; }
+
+  public slots:
+
+  protected:
+
+  private:
+    EngineAntScene *ant_engine;
+    QBrush background;
+};
+
+#endif // _UI_ENGINEVIEW_H_

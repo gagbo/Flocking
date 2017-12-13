@@ -21,20 +21,45 @@
 #include "ant.h"
 
 #include <limits>
+#include <QtWidgets>
+#include <QGraphicsScene>
+#include <QPainter>
+#include <QStyleOption>
+
+#define ANT_DEF_FRICTION 0.99999
+#define ANT_DEF_MAX_FORCE 1.0
+#define ANT_DEF_MASS 1.0
 
 uint Ant::next_id = 0;
 uint Ant::count_alive = 0;
 
 Ant::Ant(int dim)
+    : color(35, 250, 20)
 {
     id = Ant::next_id++;
     Ant::count_alive++;
     position = Victor(dim);
     velocity = Victor(dim);
     accel = Victor(dim);
-    mass = 1;
-    friction = 0;
+    mass = ANT_DEF_MASS;
+    friction = ANT_DEF_FRICTION;
     max_force = std::numeric_limits<float>::max();
+    max_force = ANT_DEF_MAX_FORCE;
+}
+
+Ant::Ant(const Victor &pos)
+    : color(35, 250, 20)
+{
+    int dim = position.is_2d() ? 2 : 3;
+    id = Ant::next_id++;
+    Ant::count_alive++;
+    position = pos;
+    velocity = Victor(dim);
+    accel = Victor(dim);
+    mass = ANT_DEF_MASS;
+    friction = ANT_DEF_FRICTION;
+    max_force = std::numeric_limits<float>::max();
+    max_force = ANT_DEF_MAX_FORCE;
 }
 
 Ant::~Ant()
@@ -55,6 +80,29 @@ operator<<(std::ostream &os, const Ant &ant)
     return os;
 }
 
+void Ant::advance(int step) {
+    std::cerr << "Advancing " << id << std::endl;
+    if (!step) {
+        decision(960, 540, time_step);
+        return;
+    }
+    
+    update(time_step);
+}
+
+QRectF Ant::boundingRect() const {
+    float adjust = 0.5;
+    return QRectF(-18 - adjust, -22 - adjust,
+                  36 + adjust, 60 + adjust);
+}
+
+void Ant::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    // Body
+    painter->setBrush(color);
+    painter->drawEllipse(-10, -20, 20, 40);
+}
+
 void
 Ant::update(float dt)
 {
@@ -64,6 +112,20 @@ Ant::update(float dt)
     velocity *= (1.0 - friction);
     position += dt * velocity;
     accel.zero();
+    setPos(position[0], position[1]);
+}
+
+QPainterPath Ant::shape() const
+{
+    QPainterPath path;
+    path.addRect(-10, -20, 20, 40);
+    return path;
+}
+
+void
+Ant::decision(float width, float height, float dt)
+{
+    capped_accel_towards(Victor(1.0, 0.0), dt);
 }
 
 Victor
