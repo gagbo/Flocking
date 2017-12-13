@@ -1,4 +1,4 @@
-project (Flocking)
+project (Flocking-main)
 
 set (Flocking_VERSION_MAJOR 0)
 set (Flocking_VERSION_MINOR 1)
@@ -17,9 +17,9 @@ include_directories ("${PROJECT_BINARY_DIR}")
 add_subdirectory (ant)
 add_subdirectory (geometry)
 
-add_executable (Flocking main.cpp)
-target_link_libraries (Flocking ant)
+add_executable (flocks main.cpp)
+target_link_libraries (flocks ant)
 
-install (TARGETS Flocking DESTINATION bin)
+install (TARGETS flocks DESTINATION bin)
 install (FILES "${PROJECT_BINARY_DIR}/FlockingConfig.h"
              DESTINATION include)
