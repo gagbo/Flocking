@@ -73,7 +73,9 @@ operator<<(std::ostream &os, const Ant &ant)
        << " )\n"
        << "Position    \t" << ant.position << "\n"
        << "Velocity    \t" << ant.velocity << "\n"
-       << "Acceleration\t" << ant.accel << "\n";
+       << "Acceleration\t" << ant.accel << " -> Force is "
+       << ant.mass * ant.accel
+       << " ( norm = " << (ant.mass * ant.accel).p_norm() << " )\n";
 
     return os;
 }
