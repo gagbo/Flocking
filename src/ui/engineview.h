@@ -37,6 +37,7 @@ class EngineView : public QGraphicsView
     virtual ~EngineView();
 
     inline EngineAntScene* getScene() const { return ant_engine; }
+    inline void add_ant(float x, float y) { ant_engine->add_ant(Victor(x,y)); }
 
   public slots:
 

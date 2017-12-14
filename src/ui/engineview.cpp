@@ -27,7 +27,6 @@ EngineView::EngineView(float dt)
 {
     ant_engine = new EngineAntScene(dt, 2);
     setScene(ant_engine);
-    ant_engine->add_ant(Victor(30, 90));
     
     setRenderHint(QPainter::Antialiasing);
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
