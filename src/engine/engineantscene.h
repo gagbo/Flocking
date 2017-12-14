@@ -50,7 +50,7 @@ class EngineAntScene : public QGraphicsScene
         return hei;
     }
 
-    inline const std::vector<Ant*> &
+    inline std::vector<Ant*> &
     list()
     {
         return ant_list;

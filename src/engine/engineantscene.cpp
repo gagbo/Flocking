@@ -20,7 +20,7 @@
 
 #include "engineantscene.h"
 
-#define DEFAULT_TIMESTEP 1
+#define DEFAULT_TIMESTEP 100
 #define DEFAULT_WIDTH 960
 #define DEFAULT_HEIGHT 540
 

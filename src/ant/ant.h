@@ -23,8 +23,8 @@
 
 #include "victor.h"
 
-#include <iostream>
 #include <QGraphicsItem>
+#include <iostream>
 
 class Ant : public QGraphicsItem
 {
@@ -78,10 +78,13 @@ class Ant : public QGraphicsItem
      * it should be equal to the engine's time step
      */
     inline Victor
-    capped_accel_towards(const Victor &target_velocity, float delay = 1)
+    capped_accel_towards(const Victor &target_velocity, float delay = 1) const
     {
         Victor fake_target = position + delay * target_velocity;
-        return capped_accel_to(fake_target, delay);
+        Victor result = capped_accel_to(fake_target, delay);
+        std::cerr << "capped_accel towards : " << target_velocity << " is "
+                  << result << "\n";
+        return result;
     }
 
     //! Return the acceleration needed to reach target in delay seconds
@@ -99,10 +102,13 @@ class Ant : public QGraphicsItem
      * it should be equal to the engine's time step
      */
     inline Victor
-    accel_towards(const Victor &target_velocity, float delay = 1)
+    accel_towards(const Victor &target_velocity, float delay = 1) const
     {
         Victor fake_target = position + delay * target_velocity;
-        return accel_to(fake_target, delay);
+        Victor result = accel_to(fake_target, delay);
+        std::cerr << "accel towards : " << target_velocity << " is " << result
+                  << "\n";
+        return result;
     }
 
     inline float
@@ -120,9 +126,12 @@ class Ant : public QGraphicsItem
     {
         return position.is_2d() ? 0.0 : position[2];
     }
-    
+
     inline void
-    set_dt(float dt) { time_step = dt; }
+    set_dt(float dt)
+    {
+        time_step = dt;
+    }
 
     friend std::ostream &operator<<(std::ostream &os, const Ant &ant);
 

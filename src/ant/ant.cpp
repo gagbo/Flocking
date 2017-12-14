@@ -20,21 +20,20 @@
 
 #include "ant.h"
 
-#include <limits>
-#include <QtWidgets>
 #include <QGraphicsScene>
 #include <QPainter>
 #include <QStyleOption>
+#include <QtWidgets>
+#include <limits>
 
-#define ANT_DEF_FRICTION 0.99999
-#define ANT_DEF_MAX_FORCE 1.0
+#define ANT_DEF_FRICTION 0.5
+#define ANT_DEF_MAX_FORCE 3.0
 #define ANT_DEF_MASS 1.0
 
 uint Ant::next_id = 0;
 uint Ant::count_alive = 0;
 
-Ant::Ant(int dim)
-    : color(35, 250, 20)
+Ant::Ant(int dim) : color(35, 250, 20)
 {
     id = Ant::next_id++;
     Ant::count_alive++;
@@ -47,8 +46,7 @@ Ant::Ant(int dim)
     max_force = ANT_DEF_MAX_FORCE;
 }
 
-Ant::Ant(const Victor &pos)
-    : color(35, 250, 20)
+Ant::Ant(const Victor &pos) : color(35, 250, 20)
 {
     int dim = position.is_2d() ? 2 : 3;
     id = Ant::next_id++;
@@ -80,23 +78,27 @@ operator<<(std::ostream &os, const Ant &ant)
     return os;
 }
 
-void Ant::advance(int step) {
-    std::cerr << "Advancing " << id << std::endl;
-    if (!step) {
-        decision(960, 540, time_step);
+void
+Ant::advance(int phase)
+{
+    if (!phase) {
         return;
     }
-    
+
+    decision(960, 540, time_step);
+    std::cerr << "Advancing " << *this << std::endl;
     update(time_step);
 }
 
-QRectF Ant::boundingRect() const {
+QRectF
+Ant::boundingRect() const
+{
     float adjust = 0.5;
-    return QRectF(-18 - adjust, -22 - adjust,
-                  36 + adjust, 60 + adjust);
+    return QRectF(-18 - adjust, -22 - adjust, 36 + adjust, 60 + adjust);
 }
 
-void Ant::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+void
+Ant::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     // Body
     painter->setBrush(color);
@@ -111,11 +113,14 @@ Ant::update(float dt)
     velocity += dt * accel;
     velocity *= (1.0 - friction);
     position += dt * velocity;
+
     accel.zero();
-    setPos(position[0], position[1]);
+    // setRotation(std::atan2(velocity[1], velocity[0]));
+    setPos(mapFromParent(position[0], position[1]));
 }
 
-QPainterPath Ant::shape() const
+QPainterPath
+Ant::shape() const
 {
     QPainterPath path;
     path.addRect(-10, -20, 20, 40);
@@ -125,7 +130,8 @@ QPainterPath Ant::shape() const
 void
 Ant::decision(float width, float height, float dt)
 {
-    capped_accel_towards(Victor(1.0, 0.0), dt);
+    accel = capped_accel_towards(Victor(1.0, 0.5), dt);
+    std::cerr << "Decided that accel = " << accel << std::endl;
 }
 
 Victor
