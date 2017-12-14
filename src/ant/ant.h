@@ -57,7 +57,7 @@ class Ant : public QGraphicsItem
      * based on the new position
      */
     void update();
-    
+
     //! Update the position so it stays always in Scene
     /*! The scene is supposed centered around (0,0)
      * so we just check position against +/- {width, height}/2

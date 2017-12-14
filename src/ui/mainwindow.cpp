@@ -20,7 +20,7 @@
 
 #include "mainwindow.h"
 
-#define WINDOW_DEFAULT_WIDTH 1440.0 
+#define WINDOW_DEFAULT_WIDTH 1440.0
 #define WINDOW_DEFAULT_HEIGHT 768.0
 #define VIEW_DEFAULT_WIDTH 1920.0
 #define VIEW_DEFAULT_HEIGHT 1080.0
@@ -28,16 +28,15 @@
 MainWindow::MainWindow(float dt) : main_view(new EngineView(dt))
 {
     setCentralWidget(main_view);
-    main_view->setSceneRect(-VIEW_DEFAULT_WIDTH/2, -VIEW_DEFAULT_HEIGHT/2, 
+    main_view->setSceneRect(-VIEW_DEFAULT_WIDTH / 2, -VIEW_DEFAULT_HEIGHT / 2,
                             VIEW_DEFAULT_WIDTH, VIEW_DEFAULT_HEIGHT);
-    
-    main_view->add_ant(-30,-90);
-    main_view->add_ant(30,90);
+
+    main_view->add_ant(-30, -90);
+    main_view->add_ant(30, 90);
 
     createActions();
     createStatusBar();
-    resize(WINDOW_DEFAULT_WIDTH,
-           WINDOW_DEFAULT_HEIGHT);
+    resize(WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT);
     move((WINDOW_DEFAULT_WIDTH - width()) / 2,
          (WINDOW_DEFAULT_HEIGHT - height()) / 2);
 

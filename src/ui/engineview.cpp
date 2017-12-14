@@ -19,15 +19,15 @@
  */
 
 #include "engineview.h"
+#include <QGraphicsScene>
 #include <QtGui/QPainter>
 #include <QtWidgets>
-#include <QGraphicsScene>
 
 EngineView::EngineView(float dt)
 {
     ant_engine = new EngineAntScene(dt, 2);
     setScene(ant_engine);
-    
+
     setRenderHint(QPainter::Antialiasing);
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
     setDragMode(QGraphicsView::ScrollHandDrag);

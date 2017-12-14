@@ -23,8 +23,8 @@
 
 #include "ant.h"
 #include "engineantscene.h"
-#include <iostream>
 #include <QGraphicsView>
+#include <iostream>
 
 class QPaintEvent;
 
@@ -36,13 +36,20 @@ class EngineView : public QGraphicsView
     EngineView(float dt);
     virtual ~EngineView();
 
-    inline EngineAntScene* getScene() const { return ant_engine; }
-    inline void add_ant(float x, float y) { ant_engine->add_ant(Victor(x,y)); }
+    inline EngineAntScene *
+    getScene() const
+    {
+        return ant_engine;
+    }
+    inline void
+    add_ant(float x, float y)
+    {
+        ant_engine->add_ant(Victor(x, y));
+    }
 
   public slots:
 
   protected:
-
   private:
     EngineAntScene *ant_engine;
     QBrush background;

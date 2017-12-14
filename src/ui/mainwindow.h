@@ -21,10 +21,9 @@
 #ifndef _UI_MAINWINDOW_H_
 #define _UI_MAINWINDOW_H_
 
-#include <QtWidgets>
-#include "engineview.h"
 #include "engineantscene.h"
-
+#include "engineview.h"
+#include <QtWidgets>
 
 class MainWindow : public QMainWindow
 {
@@ -32,7 +31,11 @@ class MainWindow : public QMainWindow
 
   public:
     MainWindow(float dt);
-    inline EngineAntScene * getScene() {return main_view->getScene(); }
+    inline EngineAntScene *
+    getScene()
+    {
+        return main_view->getScene();
+    }
 
   protected:
     void closeEvent(QCloseEvent *event) override;
@@ -43,6 +46,5 @@ class MainWindow : public QMainWindow
     EngineView *main_view;
     void createActions();
     void createStatusBar();
-
 };
 #endif // _UI_MAINWINDOW_H_

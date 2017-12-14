@@ -31,7 +31,7 @@
 #define ANT_DEF_MASS 10.0
 #define SPEED_ZERO_THRESHOLD 0.0001
 #define PI 3.141592653589793
-#define RAD_TO_DEG 180.0/PI
+#define RAD_TO_DEG 180.0 / PI
 
 uint Ant::next_id = 0;
 uint Ant::count_alive = 0;
@@ -126,7 +126,7 @@ Ant::update()
     velocity += time_step * accel;
     velocity *= (1.0 - friction);
     position += time_step * velocity;
-    
+
     wrap_around_position();
 
     accel.zero();
@@ -135,30 +135,31 @@ Ant::update()
 }
 
 void
-Ant::wrap_around_position() {
+Ant::wrap_around_position()
+{
     // TODO: Understand why those 2 lines below do not work vs the long method
-    //float wid = scene()->views()[0]->width();
-    //float hei = scene()->views()[0]->height();
+    // float wid = scene()->views()[0]->width();
+    // float hei = scene()->views()[0]->height();
     float wid = scene()->views()[0]->sceneRect().width();
     float hei = scene()->views()[0]->sceneRect().height();
-    if (position[0] < - wid/2.0) {
+    if (position[0] < -wid / 2.0) {
         do {
-        position[0] += wid;
-        } while (position[0] < - wid/2.0);
-    } else if (position[0] > wid/2.0) {
+            position[0] += wid;
+        } while (position[0] < -wid / 2.0);
+    } else if (position[0] > wid / 2.0) {
         do {
-        position[0] -= wid;
-        } while (position[0] > wid/2.0);
+            position[0] -= wid;
+        } while (position[0] > wid / 2.0);
     }
-    
-    if (position[1] < - hei/2.0) {
+
+    if (position[1] < -hei / 2.0) {
         do {
-        position[1] += hei;
-        } while (position[1] < -hei/2.0);
-    } else if (position[1] > hei/2.0) {
+            position[1] += hei;
+        } while (position[1] < -hei / 2.0);
+    } else if (position[1] > hei / 2.0) {
         do {
-        position[1] -= hei;
-        } while (position[1] > hei/2.0);
+            position[1] -= hei;
+        } while (position[1] > hei / 2.0);
     }
 }
 

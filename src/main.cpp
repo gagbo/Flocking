@@ -49,12 +49,13 @@ main(int argc, char *argv[])
     parser.addPositionalArgument("time_step", "The time step of the engine");
     parser.process(app);
 
-    float time_step = 1000.0/33.0;
+    float time_step = 1000.0 / 33.0;
     MainWindow mainWin(time_step);
     mainWin.show();
-    
+
     QTimer timer;
-    QObject::connect(&timer, SIGNAL(timeout()), mainWin.getScene(), SLOT(advance()));
+    QObject::connect(&timer, SIGNAL(timeout()), mainWin.getScene(),
+                     SLOT(advance()));
     timer.start(time_step);
     return app.exec();
 }

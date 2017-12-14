@@ -20,8 +20,8 @@
 
 #include "engineantscene.h"
 
-
-EngineAntScene::EngineAntScene(float dt, int dim) : dimension(dim), time_step(dt)
+EngineAntScene::EngineAntScene(float dt, int dim)
+    : dimension(dim), time_step(dt)
 {
     setItemIndexMethod(QGraphicsScene::BspTreeIndex);
 }
@@ -37,7 +37,7 @@ EngineAntScene::~EngineAntScene()
 void
 EngineAntScene::add_ant(Victor position)
 {
-    Ant* new_ant = new Ant(position);
+    Ant *new_ant = new Ant(position);
     ant_list.push_back(new_ant);
     new_ant->set_dt(time_step);
     addItem(new_ant);

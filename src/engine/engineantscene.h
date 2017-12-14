@@ -23,8 +23,8 @@
 
 #include "ant.h"
 #include "victor.h"
-#include <vector>
 #include <QGraphicsScene>
+#include <vector>
 #define DEFAULT_TIMESTEP 1
 
 class EngineAntScene : public QGraphicsScene
@@ -41,7 +41,7 @@ class EngineAntScene : public QGraphicsScene
         return time_step;
     }
 
-    inline std::vector<Ant*> &
+    inline std::vector<Ant *> &
     list()
     {
         return ant_list;
@@ -54,7 +54,7 @@ class EngineAntScene : public QGraphicsScene
     }
 
   protected:
-    std::vector<Ant*> ant_list;
+    std::vector<Ant *> ant_list;
     int dimension;
     float time_step;
 };
