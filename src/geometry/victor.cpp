@@ -69,7 +69,7 @@ Victor::p_distance(const Victor &other, int p) const
     }
     double norm = 0; // double because of the exponentiation
 
-    for (int i = 0; i < d; ++i) {
+    for (int i = 0; i < dim; ++i) {
         norm += std::pow((coord[i] - other[i]), p);
     }
 
@@ -98,10 +98,17 @@ Victor::operator-(const Victor &rhs) const
     return result;
 }
 
-Victor
-Victor::operator=(const Victor &rhs) const
+Victor &
+Victor::operator=(const Victor &rhs)
 {
-    return Victor(rhs);
+    if (this != &rhs) {
+        d = rhs.d;
+        coord.clear();
+        for (int i = 0; i < d; i++) {
+            coord.push_back(rhs[i]);
+        }
+    }
+    return *this;
 }
 
 float &Victor::operator[](int zero_based_coordinate)
@@ -114,48 +121,50 @@ const float &Victor::operator[](int zero_based_coordinate) const
     return coord[zero_based_coordinate];
 }
 
-void
+Victor &
 Victor::operator*=(float coef)
 {
     for (int i = 0; i < d; ++i) {
         coord[i] *= coef;
     }
+    return *this;
 }
 
-void
+Victor &
 Victor::operator/=(float coef)
 {
     for (int i = 0; i < d; ++i) {
         coord[i] /= coef;
     }
+    return *this;
 }
 
-void
+Victor &
 Victor::operator+=(const Victor &rhs)
 {
     if (rhs.d != d) {
         std::cerr << "Victor addition : not compatible dimensions -> unchanged "
                      "Victor\n";
-        return;
+        return *this;
     }
     for (int i = 0; i < d; ++i) {
         coord[i] += rhs[i];
     }
-    return;
+    return *this;
 }
 
-void
+Victor &
 Victor::operator-=(const Victor &rhs)
 {
     if (rhs.d != d) {
         std::cerr << "Victor addition : not compatible dimensions -> unchanged "
                      "Victor\n";
-        return;
+        return *this;
     }
     for (int i = 0; i < d; ++i) {
         coord[i] -= rhs[i];
     }
-    return;
+    return *this;
 }
 
 Victor operator*(float coef, const Victor &rhs)

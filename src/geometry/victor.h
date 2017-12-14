@@ -92,13 +92,13 @@ class Victor
     // Operations
     Victor operator+(const Victor &rhs) const;
     Victor operator-(const Victor &rhs) const;
-    Victor operator=(const Victor &rhs) const;
+    Victor &operator=(const Victor &rhs);
     float &operator[](int zero_based_coordinate);
     const float &operator[](int zero_based_coordinate) const;
-    void operator*=(float coef);
-    void operator/=(float coef);
-    void operator+=(const Victor &rhs);
-    void operator-=(const Victor &rhs);
+    Victor &operator*=(float coef);
+    Victor &operator/=(float coef);
+    Victor &operator+=(const Victor &rhs);
+    Victor &operator-=(const Victor &rhs);
     friend Victor operator*(float coef, const Victor &rhs);
     friend std::ostream &operator<<(std::ostream &os, const Victor &v);
 
