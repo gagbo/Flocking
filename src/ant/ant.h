@@ -107,6 +107,12 @@ class Ant : public QGraphicsItem
         return result;
     }
 
+    /////////////// Decision methods
+
+    Victor decision_separation_velocity() const;
+    Victor decision_alignment_velocity() const;
+    Victor decision_cohesion_velocity() const;
+
     inline float
     x() const
     {
@@ -133,14 +139,15 @@ class Ant : public QGraphicsItem
 
   protected:
     void advance(int phase) override;
-    int id;          //!< Global Ant Id
-    Victor position; //!< Position
-    Victor velocity; //!< Velocity
-    Victor accel;    //!< Acceleration
-    float mass;      //!< Mass of the Ant
-    float friction;  //!< Friction seen by the ant
-    float max_force; //!< Maximum force the Ant can apply to move itself
-    QColor color;    //!< Color
-    float time_step; //!< Time step given from the engine
+    int id;              //!< Global Ant Id
+    Victor position;     //!< Position
+    Victor velocity;     //!< Velocity
+    Victor accel;        //!< Acceleration
+    float mass;          //!< Mass of the Ant
+    float friction;      //!< Friction seen by the ant
+    float max_force;     //!< Maximum force the Ant can apply to move itself
+    QColor color;        //!< Color
+    float time_step;     //!< Time step given from the engine
+    float view_distance; //!< View distance
 };
 #endif // _ANT_ANT_H_

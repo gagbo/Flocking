@@ -29,6 +29,7 @@
 #define ANT_DEF_FRICTION 0.2
 #define ANT_DEF_MAX_FORCE 60.0
 #define ANT_DEF_MASS 10.0
+#define ANT_DEF_VISION 150.0
 #define SPEED_ZERO_THRESHOLD 0.0001
 #define PI 3.141592653589793
 #define RAD_TO_DEG 180.0 / PI
@@ -45,8 +46,9 @@ Ant::Ant(int dim) : color(35, 250, 20)
     accel = Victor(dim);
     mass = ANT_DEF_MASS;
     friction = ANT_DEF_FRICTION;
-    max_force = std::numeric_limits<float>::max();
+    // max_force = std::numeric_limits<float>::max();
     max_force = ANT_DEF_MAX_FORCE;
+    view_distance = ANT_DEF_VISION;
 }
 
 Ant::Ant(const Victor &pos) : color(35, 250, 20)
@@ -59,8 +61,9 @@ Ant::Ant(const Victor &pos) : color(35, 250, 20)
     accel = Victor(dim);
     mass = ANT_DEF_MASS;
     friction = ANT_DEF_FRICTION;
-    max_force = std::numeric_limits<float>::max();
+    // max_force = std::numeric_limits<float>::max();
     max_force = ANT_DEF_MAX_FORCE;
+    view_distance = ANT_DEF_VISION;
 }
 
 Ant::~Ant()
@@ -204,4 +207,66 @@ Ant::capped_accel_to(const Victor &target) const
     }
 
     return desired_accel;
+}
+
+Victor
+Ant::decision_separation_velocity() const
+{
+    // Choose a distance at which boids start avoiding each other
+    // TODO: Add a distance method to take wrap_around into account
+    float separation = view_distance / 2;
+    Victor desired(position.is_2d() ? 2 : 3);
+    QList<QGraphicsItem *> danger_ants = scene()->items(
+        QPolygonF() << mapToScene(0, 0) << mapToScene(-separation, -separation)
+                    << mapToScene(separation, -separation));
+
+    foreach (QGraphicsItem *item, danger_ants) {
+        if (item == this)
+            continue;
+        QLineF line_to_rival(QPointF(0, 0), mapFromItem(item, 0, 0));
+        Victor weighted_diff = Victor(line_to_rival.dx(), line_to_rival.dy());
+        float dist = weighted_diff.p_norm();
+        weighted_diff.p_normalize();
+        weighted_diff /= dist;
+        desired += weighted_diff;
+    }
+
+    desired.p_normalize();
+
+    return desired;
+}
+
+Victor
+Ant::decision_alignment_velocity() const
+{
+    Victor desired(position.is_2d() ? 2 : 3);
+    QList<QGraphicsItem *> all_ants = scene()->items();
+
+    foreach (QGraphicsItem *item, all_ants) {
+        // TODO : get item->velocity though item is not an Ant
+        // desired += item->velocity;
+    }
+
+    desired.p_normalize();
+
+    return desired;
+}
+
+Victor
+Ant::decision_cohesion_velocity() const
+{
+    Victor desired(position.is_2d() ? 2 : 3);
+    QList<QGraphicsItem *> all_ants = scene()->items();
+
+    foreach (QGraphicsItem *item, all_ants) {
+        // TODO : get item->position though item is not an Ant
+        // desired += item->position;
+    }
+    desired /= count_alive; // Now desired is the mean position
+    desired -= position;    // Now desired is
+                            // the vector from position to mean pos
+    desired /= time_step;   // Now desired is
+                            // the speed from position to mean pos
+
+    return desired;
 }
