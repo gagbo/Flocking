@@ -130,7 +130,7 @@ Ant::shape() const
 void
 Ant::decision(float width, float height, float dt)
 {
-    accel = capped_accel_towards(Victor(1.0, 0.5), dt);
+    accel = capped_accel_to(Victor(width / 2.0, height / 2.0), dt);
     std::cerr << "Decided that accel = " << accel << std::endl;
 }
 
