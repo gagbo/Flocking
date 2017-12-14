@@ -104,7 +104,15 @@ Ant::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     // Body
     painter->setBrush(color);
+    if (velocity.p_norm() < SPEED_ZERO_THRESHOLD) {
+        painter->setBrush(Qt::darkBlue);
+    }
     painter->drawEllipse(-10, -20, 20, 40);
+
+    // Eyes
+    painter->setBrush(Qt::white);
+    painter->drawEllipse(-10, -17, 8, 8);
+    painter->drawEllipse(2, -17, 8, 8);
 }
 
 void
@@ -117,8 +125,8 @@ Ant::update()
     position += time_step * velocity;
 
     accel.zero();
-    setRotation(std::atan2(velocity[1], velocity[0]));
-    setPos(mapFromParent(position[0], position[1]));
+    setRotation(180 - RAD_TO_DEG * std::atan2(velocity[0], velocity[1]));
+    setPos(position[0], position[1]);
 }
 
 QPainterPath
