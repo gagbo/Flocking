@@ -24,6 +24,7 @@
 
 Victor::Victor(int dim) : d(dim)
 {
+    coord.clear();
     for (int i = 0; i < d; ++i) {
         coord.push_back(0.0);
     }
@@ -31,12 +32,14 @@ Victor::Victor(int dim) : d(dim)
 
 Victor::Victor(float x, float y) : d(2)
 {
+    coord.clear();
     coord.push_back(x);
     coord.push_back(y);
 }
 
 Victor::Victor(float x, float y, float z) : d(3)
 {
+    coord.clear();
     coord.push_back(x);
     coord.push_back(y);
     coord.push_back(z);
@@ -45,6 +48,7 @@ Victor::Victor(float x, float y, float z) : d(3)
 Victor::Victor(const Victor &other)
 {
     d = other.is_2d() ? 2 : 3;
+    coord.clear();
     for (int i = 0; i < d; ++i) {
         coord.push_back(other[i]);
     }
@@ -81,30 +85,16 @@ Victor::p_norm(int p) const
 Victor
 Victor::operator+(const Victor &rhs) const
 {
-    if (rhs.d != d) {
-        std::cerr
-            << "Victor addition : not compatible dimensions -> NULL result\n";
-        return Victor(d);
-    }
-    Victor result = Victor(d);
-    for (int i = 0; i < d; ++i) {
-        result[i] = coord[i] + rhs[i];
-    }
+    Victor result = Victor(*this);
+    result += rhs;
     return result;
 }
 
 Victor
 Victor::operator-(const Victor &rhs) const
 {
-    if (rhs.d != d) {
-        std::cerr << "Victor substraction : not compatible dimensions -> NULL "
-                     "result\n";
-        return Victor(d);
-    }
-    Victor result = Victor(d);
-    for (int i = 0; i < d; ++i) {
-        result[i] = coord[i] - rhs[i];
-    }
+    Victor result = Victor(*this);
+    result -= rhs;
     return result;
 }
 
@@ -170,10 +160,8 @@ Victor::operator-=(const Victor &rhs)
 
 Victor operator*(float coef, const Victor &rhs)
 {
-    Victor result = Victor(rhs.d);
-    for (int i = 0; i < rhs.d; ++i) {
-        result[i] = coef * rhs[i];
-    }
+    Victor result = Victor(rhs);
+    result *= coef;
     return result;
 }
 
