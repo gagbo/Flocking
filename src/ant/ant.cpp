@@ -141,7 +141,7 @@ Ant::accel_to(const Victor &target) const
 {
     Victor desired_velocity = target - position;
     desired_velocity /= time_step;
-    Victor desired_accel = desired_velocity;
+    Victor desired_accel = desired_velocity - velocity;
     desired_accel /= time_step;
 
     return desired_accel;
