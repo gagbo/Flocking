@@ -26,9 +26,12 @@
 #include <QtWidgets>
 #include <limits>
 
-#define ANT_DEF_FRICTION 0.0
-#define ANT_DEF_MAX_FORCE 3.0
-#define ANT_DEF_MASS 100.0
+#define ANT_DEF_FRICTION 0.2
+#define ANT_DEF_MAX_FORCE 60.0
+#define ANT_DEF_MASS 10.0
+#define SPEED_ZERO_THRESHOLD 0.0001
+#define PI 3.141592653589793
+#define RAD_TO_DEG 180.0/PI
 
 uint Ant::next_id = 0;
 uint Ant::count_alive = 0;
@@ -88,8 +91,8 @@ Ant::advance(int phase)
     }
 
     decision(960, 540);
-    std::cerr << "Advancing " << *this << std::endl;
     update();
+    std::cerr << "Advancing " << *this << std::endl;
 }
 
 QRectF
@@ -140,14 +143,19 @@ Ant::shape() const
 void
 Ant::decision(float width, float height)
 {
-    accel = capped_accel_to(Victor(width / 2.0, height / 2.0));
-    std::cerr << "Decided that accel = " << accel << std::endl;
+    // accel = capped_accel_to(Victor(width / 3.0, height / 4.0));
+    accel = capped_accel_towards(Victor(0.1, -0.025));
+    std::cerr << "Decided that accel = " << accel << " -> Force is "
+              << mass * accel << " ( norm = " << (mass * accel).p_norm()
+              << " )\n";
 }
 
 Victor
 Ant::accel_to(const Victor &target) const
 {
     Victor desired_velocity = target - position;
+    std::cerr << "Distance to " << target << " is " << desired_velocity.p_norm()
+              << "\n";
     desired_velocity /= time_step;
     Victor desired_accel = desired_velocity - velocity;
     desired_accel /= time_step;
