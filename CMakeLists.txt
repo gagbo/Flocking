@@ -10,6 +10,6 @@ set (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install")
 
 set (BUILD_SHARED_LIBS OFF)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra")
 
 add_subdirectory(src)
