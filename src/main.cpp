@@ -54,6 +54,6 @@ main(int argc, char *argv[])
     
     QTimer timer;
     QObject::connect(&timer, SIGNAL(timeout()), mainWin.getScene(), SLOT(advance()));
-    timer.start(1000 / 33);
+    timer.start(2000);
     return app.exec();
 }
