@@ -87,9 +87,9 @@ Ant::advance(int phase)
         return;
     }
 
-    decision(960, 540, time_step);
+    decision(960, 540);
     std::cerr << "Advancing " << *this << std::endl;
-    update(time_step);
+    update();
 }
 
 QRectF
@@ -108,16 +108,16 @@ Ant::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 }
 
 void
-Ant::update(float dt)
+Ant::update()
 {
     // accel = capped_accel_to(target, dt);
     // accel = capped_accel_towards(direction, dt);
-    velocity += dt * accel;
+    velocity += time_step * accel;
     velocity *= (1.0 - friction);
-    position += dt * velocity;
+    position += time_step * velocity;
 
     accel.zero();
-    // setRotation(std::atan2(velocity[1], velocity[0]));
+    setRotation(std::atan2(velocity[1], velocity[0]));
     setPos(mapFromParent(position[0], position[1]));
 }
 
@@ -130,27 +130,27 @@ Ant::shape() const
 }
 
 void
-Ant::decision(float width, float height, float dt)
+Ant::decision(float width, float height)
 {
-    accel = capped_accel_to(Victor(width / 2.0, height / 2.0), dt);
+    accel = capped_accel_to(Victor(width / 2.0, height / 2.0));
     std::cerr << "Decided that accel = " << accel << std::endl;
 }
 
 Victor
-Ant::accel_to(const Victor &target, float delay) const
+Ant::accel_to(const Victor &target) const
 {
     Victor desired_velocity = target - position;
-    desired_velocity /= delay;
+    desired_velocity /= time_step;
     Victor desired_accel = desired_velocity;
-    desired_accel /= delay;
+    desired_accel /= time_step;
 
     return desired_accel;
 }
 
 Victor
-Ant::capped_accel_to(const Victor &target, float delay) const
+Ant::capped_accel_to(const Victor &target) const
 {
-    Victor desired_accel = accel_to(target, delay);
+    Victor desired_accel = accel_to(target);
     if (mass * desired_accel.p_norm() > max_force) {
         desired_accel.p_normalize();
         desired_accel *= max_force / mass;

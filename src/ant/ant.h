@@ -49,8 +49,6 @@ class Ant : public QGraphicsItem
 
     //! Give the shape of the Ant for collision detection
     QPainterPath shape() const override;
-
-    //! Paint an Ant
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget) override;
 
@@ -58,54 +56,46 @@ class Ant : public QGraphicsItem
     /*! Also where friction and/or mass and/or other members can be updated
      * based on the new position
      */
-    void update(float dt = 1);
+    void update();
 
     //! Decide where to go. Set acceleration properly to prepare for update
-    void decision(float width, float height, float dt);
+    void decision(float width, float height);
 
-    //! Return the capped accel needed to reach target in delay s
+    //! Return the capped accel needed to reach target
     /*! \param target should be the position of the target
      * the method will then compute the difference (Ant -> target)
      * and compute the acceleration Victor to reach it.
-     * \param delay is the time in which we want to reach target.
-     * it should be equal to the engine's time step
      */
-    Victor capped_accel_to(const Victor &target, float delay = 1) const;
+    Victor capped_accel_to(const Victor &target) const;
 
-    //! Return the capped accel needed to reach target velocity in delay seconds
+    //! Return the capped accel needed to reach target velocity
     /*! \param target_velocity is the velocity we want to reach
-     * \param delay is the time in which we want to reach target velocity
-     * it should be equal to the engine's time step
      */
     inline Victor
-    capped_accel_towards(const Victor &target_velocity, float delay = 1) const
+    capped_accel_towards(const Victor &target_velocity) const
     {
-        Victor fake_target = position + delay * target_velocity;
-        Victor result = capped_accel_to(fake_target, delay);
+        Victor fake_target = position + time_step * target_velocity;
+        Victor result = capped_accel_to(fake_target);
         std::cerr << "capped_accel towards : " << target_velocity << " is "
                   << result << "\n";
         return result;
     }
 
-    //! Return the acceleration needed to reach target in delay seconds
+    //! Return the acceleration needed to reach target
     /*! \param target should be the position of the target
      * the method will then compute the difference (Ant -> target)
      * and compute the acceleration Victor to reach it.
-     * \param delay is the time in which we want to reach target
-     * it should be equal to the engine's time step
      */
-    Victor accel_to(const Victor &target, float delay = 1) const;
+    Victor accel_to(const Victor &target) const;
 
-    //! Return the acceleration needed to reach target velocity in delay seconds
+    //! Return the acceleration needed to reach target velocity
     /*! \param target_velocity is the velocity we want to reach
-     * \param delay is the time in which we want to reach target velocity
-     * it should be equal to the engine's time step
      */
     inline Victor
-    accel_towards(const Victor &target_velocity, float delay = 1) const
+    accel_towards(const Victor &target_velocity) const
     {
-        Victor fake_target = position + delay * target_velocity;
-        Victor result = accel_to(fake_target, delay);
+        Victor fake_target = position + time_step * target_velocity;
+        Victor result = accel_to(fake_target);
         std::cerr << "accel towards : " << target_velocity << " is " << result
                   << "\n";
         return result;
@@ -136,7 +126,7 @@ class Ant : public QGraphicsItem
     friend std::ostream &operator<<(std::ostream &os, const Ant &ant);
 
   protected:
-    void advance(int step) override;
+    void advance(int phase) override;
     int id;          //!< Global Ant Id
     Victor position; //!< Position
     Victor velocity; //!< Velocity
