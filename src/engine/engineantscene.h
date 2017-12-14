@@ -40,16 +40,6 @@ class EngineAntScene : public QGraphicsScene
     {
         return time_step;
     }
-    inline float
-    width()
-    {
-        return sceneRect().width();
-    }
-    inline float
-    height()
-    {
-        return sceneRect().height();
-    }
 
     inline std::vector<Ant*> &
     list()

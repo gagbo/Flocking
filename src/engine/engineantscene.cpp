@@ -40,6 +40,6 @@ EngineAntScene::add_ant(Victor position)
     Ant* new_ant = new Ant(position);
     ant_list.push_back(new_ant);
     new_ant->set_dt(time_step);
-    new_ant->update(); // Called so the ant is at the right pos on first frame
     addItem(new_ant);
+    new_ant->update(); // Called so the ant is at the right pos on first frame
 }

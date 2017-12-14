@@ -126,10 +126,40 @@ Ant::update()
     velocity += time_step * accel;
     velocity *= (1.0 - friction);
     position += time_step * velocity;
+    
+    wrap_around_position();
 
     accel.zero();
     setRotation(180 - RAD_TO_DEG * std::atan2(velocity[0], velocity[1]));
     setPos(position[0], position[1]);
+}
+
+void
+Ant::wrap_around_position() {
+    // TODO: Understand why those 2 lines below do not work vs the long method
+    //float wid = scene()->views()[0]->width();
+    //float hei = scene()->views()[0]->height();
+    float wid = scene()->views()[0]->sceneRect().width();
+    float hei = scene()->views()[0]->sceneRect().height();
+    if (position[0] < - wid/2.0) {
+        do {
+        position[0] += wid;
+        } while (position[0] < - wid/2.0);
+    } else if (position[0] > wid/2.0) {
+        do {
+        position[0] -= wid;
+        } while (position[0] > wid/2.0);
+    }
+    
+    if (position[1] < - hei/2.0) {
+        do {
+        position[1] += hei;
+        } while (position[1] < -hei/2.0);
+    } else if (position[1] > hei/2.0) {
+        do {
+        position[1] -= hei;
+        } while (position[1] > hei/2.0);
+    }
 }
 
 QPainterPath
