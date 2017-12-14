@@ -23,9 +23,9 @@
 #include <QtWidgets>
 #include <QGraphicsScene>
 
-EngineView::EngineView()
+EngineView::EngineView(float dt)
 {
-    ant_engine = new EngineAntScene(2);
+    ant_engine = new EngineAntScene(dt, 2);
     setScene(ant_engine);
     ant_engine->add_ant(Victor(30, 90));
     
@@ -40,12 +40,4 @@ EngineView::EngineView()
 EngineView::~EngineView()
 {
     delete ant_engine;
-}
-
-void
-EngineView::set_engine(float width, float height, float time_step)
-{
-    ant_engine->set_wid(width);
-    ant_engine->set_hei(height);
-    ant_engine->set_dt(time_step);
 }

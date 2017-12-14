@@ -33,10 +33,9 @@ class EngineView : public QGraphicsView
     Q_OBJECT
 
   public:
-    EngineView();
+    EngineView(float dt);
     virtual ~EngineView();
 
-    void set_engine(float width, float height, float time_step);
     inline EngineAntScene* getScene() const { return ant_engine; }
 
   public slots:

@@ -25,11 +25,12 @@
 #include "victor.h"
 #include <vector>
 #include <QGraphicsScene>
+#define DEFAULT_TIMESTEP 1
 
 class EngineAntScene : public QGraphicsScene
 {
   public:
-    EngineAntScene(int dim = 2);
+    EngineAntScene(float dt = DEFAULT_TIMESTEP, int dim = 2);
     ~EngineAntScene();
 
     void add_ant(Victor position);
@@ -42,30 +43,18 @@ class EngineAntScene : public QGraphicsScene
     inline float
     width()
     {
-        return wid;
+        return sceneRect().width();
     }
     inline float
     height()
     {
-        return hei;
+        return sceneRect().height();
     }
 
     inline std::vector<Ant*> &
     list()
     {
         return ant_list;
-    }
-
-    inline void
-    set_wid(float width)
-    {
-        wid = width;
-    }
-
-    inline void
-    set_hei(float height)
-    {
-        hei = height;
     }
 
     inline void
@@ -78,8 +67,6 @@ class EngineAntScene : public QGraphicsScene
     std::vector<Ant*> ant_list;
     int dimension;
     float time_step;
-    float wid;
-    float hei;
 };
 
 #endif // _ENGINE_ENGINEANTSCENE_H_

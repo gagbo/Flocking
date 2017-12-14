@@ -31,7 +31,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
   public:
-    MainWindow();
+    MainWindow(float dt);
     inline EngineAntScene * getScene() {return main_view->getScene(); }
 
   protected:

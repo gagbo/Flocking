@@ -20,12 +20,16 @@
 
 #include "mainwindow.h"
 
-#define WINDOW_DEFAULT_WIDTH 960 
-#define WINDOW_DEFAULT_HEIGHT 540
+#define WINDOW_DEFAULT_WIDTH 1440.0 
+#define WINDOW_DEFAULT_HEIGHT 768.0
+#define VIEW_DEFAULT_WIDTH 1920.0
+#define VIEW_DEFAULT_HEIGHT 1080.0
 
-MainWindow::MainWindow() : main_view(new EngineView)
+MainWindow::MainWindow(float dt) : main_view(new EngineView(dt))
 {
     setCentralWidget(main_view);
+    main_view->setSceneRect(-VIEW_DEFAULT_WIDTH/2, -VIEW_DEFAULT_HEIGHT/2, 
+                            VIEW_DEFAULT_WIDTH, VIEW_DEFAULT_HEIGHT);
 
     createActions();
     createStatusBar();

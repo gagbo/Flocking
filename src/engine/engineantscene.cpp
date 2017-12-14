@@ -20,16 +20,9 @@
 
 #include "engineantscene.h"
 
-#define DEFAULT_TIMESTEP 1
-#define DEFAULT_WIDTH 960
-#define DEFAULT_HEIGHT 540
 
-EngineAntScene::EngineAntScene(int dim) : dimension(dim)
+EngineAntScene::EngineAntScene(float dt, int dim) : dimension(dim), time_step(dt)
 {
-    hei = DEFAULT_HEIGHT;
-    wid = DEFAULT_WIDTH;
-    time_step = DEFAULT_TIMESTEP;
-    setSceneRect(-wid/2.0, -hei/2.0, wid, hei);
     setItemIndexMethod(QGraphicsScene::BspTreeIndex);
 }
 
