@@ -26,9 +26,9 @@
 #include <QtWidgets>
 #include <limits>
 
-#define ANT_DEF_FRICTION 0.5
+#define ANT_DEF_FRICTION 0.0
 #define ANT_DEF_MAX_FORCE 3.0
-#define ANT_DEF_MASS 1.0
+#define ANT_DEF_MASS 100.0
 
 uint Ant::next_id = 0;
 uint Ant::count_alive = 0;
