@@ -26,13 +26,17 @@
 #include <QtWidgets>
 #include <limits>
 
-#define ANT_DEF_FRICTION 0.2
+#define ANT_DEF_FRICTION 0.1
 #define ANT_DEF_MAX_FORCE 1
 #define ANT_DEF_MASS 100.0
 #define ANT_DEF_VISION 200.0
+
 #define SPEED_ZERO_THRESHOLD 0.0001
 #define PI 3.141592653589793
 #define RAD_TO_DEG 180.0 / PI
+
+#define CRUISE_SPEED 15.0
+#define SEPARATION_POTENTIAL_EXP 1.0
 
 uint Ant::next_id = 0;
 uint Ant::count_alive = 0;
@@ -205,9 +209,9 @@ Ant::decision()
     // accel = capped_accel_to(Victor(width / 3.0, height / 4.0));
     all_ants = scene()->items();
     Victor decided_velocity(0.0, 0.0);
-    decided_velocity = 0.1 * decision_cohesion_velocity();
+    decided_velocity = 0.125 * decision_cohesion_velocity();
     decided_velocity += 0.5 * decision_alignment_velocity();
-    decided_velocity += 0.4 * decision_separation_velocity();
+    decided_velocity += 0.375 * decision_separation_velocity();
     accel = capped_accel_towards(decided_velocity);
     std::cerr << "Decided that accel = " << accel << " -> Force is "
               << mass * accel << " ( norm = " << (mass * accel).p_norm()
@@ -256,9 +260,11 @@ Ant::decision_separation_velocity() const
         Victor weighted_diff = -1 * to_rival;
         float dist = weighted_diff.p_norm();
         weighted_diff.p_normalize();
-        weighted_diff /= pow(dist, 0.2);
+        weighted_diff /= pow(dist, SEPARATION_POTENTIAL_EXP);
         desired += weighted_diff;
     }
+    desired.p_normalize();
+    desired *= CRUISE_SPEED / time_step;
 
     return desired;
 }
@@ -282,6 +288,9 @@ Ant::decision_alignment_velocity() const
         desired /= considered_neigbours;
     }
 
+    desired.p_normalize();
+    desired *= CRUISE_SPEED / time_step;
+
     return desired;
 }
 
@@ -291,13 +300,12 @@ Ant::decision_cohesion_velocity() const
     Victor desired(position.is_2d() ? 2 : 3);
 
     foreach (QGraphicsItem *item, all_ants) {
-        desired += dynamic_cast<Ant *>(item)->position;
+        desired += point_to(dynamic_cast<Ant &>(*item));
     }
     desired /= count_alive; // Now desired is the mean position
-    desired -= position;    // Now desired is
-                            // the vector from position to mean pos
-    desired /= time_step;   // Now desired is
-                            // the speed from position to mean pos
+
+    desired.p_normalize();
+    desired *= CRUISE_SPEED / time_step;
 
     return desired;
 }
