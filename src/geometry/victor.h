@@ -77,7 +77,7 @@ class Victor
     inline void
     p_normalize(int p = 2)
     {
-        if (!this->p_norm(p)) {
+        if (this->p_norm(p) != 0 ) {
             *this /= this->p_norm(p);
         }
     }
