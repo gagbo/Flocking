@@ -24,6 +24,9 @@
 #define WINDOW_DEFAULT_HEIGHT 768.0
 #define VIEW_DEFAULT_WIDTH 1920.0
 #define VIEW_DEFAULT_HEIGHT 1080.0
+#define ANT_DEFAULT_COUNT 50
+#define LO_SPEED -20.0
+#define HI_SPEED 20.0
 
 MainWindow::MainWindow(float dt) : main_view(new EngineView(dt))
 {
@@ -31,11 +34,23 @@ MainWindow::MainWindow(float dt) : main_view(new EngineView(dt))
     main_view->setSceneRect(-VIEW_DEFAULT_WIDTH / 2, -VIEW_DEFAULT_HEIGHT / 2,
                             VIEW_DEFAULT_WIDTH, VIEW_DEFAULT_HEIGHT);
 
-    main_view->add_ant(-30, -90, 1, 1);
-    main_view->add_ant(30, 90, 1, 1);
-    main_view->add_ant(25, -60, -1, -1);
-    main_view->add_ant(10, 150, -1, -1);
-    main_view->add_ant(-50, 60, -1, -1);
+    for (int i = 0; i < ANT_DEFAULT_COUNT; ++i) {
+        float rand_x = -VIEW_DEFAULT_WIDTH / 2.0 +
+                       static_cast<float>(rand()) /
+                           (static_cast<float>(RAND_MAX / VIEW_DEFAULT_WIDTH));
+        float rand_y = -VIEW_DEFAULT_HEIGHT / 2.0 +
+                       static_cast<float>(rand()) /
+                           (static_cast<float>(RAND_MAX / VIEW_DEFAULT_HEIGHT));
+        float rand_vx =
+            LO_SPEED +
+            static_cast<float>(rand()) /
+                (static_cast<float>(RAND_MAX / (HI_SPEED - LO_SPEED)));
+        float rand_vy =
+            LO_SPEED +
+            static_cast<float>(rand()) /
+                (static_cast<float>(RAND_MAX / (HI_SPEED - LO_SPEED)));
+        main_view->add_ant(rand_x, rand_y, rand_vx, rand_vy);
+    }
 
     createActions();
     createStatusBar();

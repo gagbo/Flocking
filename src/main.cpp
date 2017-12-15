@@ -34,6 +34,8 @@ main(int argc, char *argv[])
     std::cout << argv[0] << " Version " << Flocking_VERSION_MAJOR << "."
               << Flocking_VERSION_MINOR << std::endl;
 
+    srand(static_cast<unsigned>(time(0)));
+
     QApplication app(argc, argv);
     QCoreApplication::setOrganizationName("Gerry A");
     QCoreApplication::setApplicationName("Flocking Autonomous Agents");
@@ -49,7 +51,7 @@ main(int argc, char *argv[])
     parser.addPositionalArgument("time_step", "The time step of the engine");
     parser.process(app);
 
-    float time_step = 1000.0 / 33.0;
+    float time_step = 1000.0 / 50.0;
     MainWindow mainWin(time_step);
     mainWin.show();
 

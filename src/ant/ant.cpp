@@ -27,9 +27,9 @@
 #include <limits>
 
 #define ANT_DEF_FRICTION 0.2
-#define ANT_DEF_MAX_FORCE 1.0
+#define ANT_DEF_MAX_FORCE 1
 #define ANT_DEF_MASS 100.0
-#define ANT_DEF_VISION 150.0
+#define ANT_DEF_VISION 200.0
 #define SPEED_ZERO_THRESHOLD 0.0001
 #define PI 3.141592653589793
 #define RAD_TO_DEG 180.0 / PI
@@ -178,12 +178,12 @@ Ant::point_to(const Ant &other) const
     }
     Victor naive_vec = other.position - position;
     if (naive_vec[0] > world_wid / 2.0) {
-        naive_vec -= world_wid;
+        naive_vec[0] -= world_wid;
     } else if (naive_vec[0] < -world_wid / 2.0) {
         naive_vec[0] += world_wid;
     }
     if (naive_vec[1] > world_hei / 2.0) {
-        naive_vec -= world_hei;
+        naive_vec[1] -= world_hei;
     } else if (naive_vec[1] < -world_hei / 2.0) {
         naive_vec[1] += world_hei;
     }
@@ -205,8 +205,8 @@ Ant::decision()
     // accel = capped_accel_to(Victor(width / 3.0, height / 4.0));
     Victor decided_velocity(0.0, 0.0);
     decided_velocity = 0.1 * decision_cohesion_velocity();
-    decided_velocity += 0.6 * decision_alignment_velocity();
-    decided_velocity += 0.3 * decision_separation_velocity();
+    decided_velocity += 0.5 * decision_alignment_velocity();
+    decided_velocity += 0.4 * decision_separation_velocity();
     accel = capped_accel_towards(decided_velocity);
     std::cerr << "Decided that accel = " << accel << " -> Force is "
               << mass * accel << " ( norm = " << (mass * accel).p_norm()
@@ -273,7 +273,7 @@ Ant::decision_alignment_velocity() const
         desired += dynamic_cast<Ant *>(item)->velocity;
     }
 
-    desired /= count_alive;
+    //desired /= count_alive;
 
     return desired;
 }
