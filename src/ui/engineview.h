@@ -42,9 +42,9 @@ class EngineView : public QGraphicsView
         return ant_engine;
     }
     inline void
-    add_ant(float x, float y)
+    add_ant(float x, float y, float vx = 0, float vy = 0)
     {
-        ant_engine->add_ant(Victor(x, y));
+        ant_engine->add_ant(Victor(x, y), Victor(vx, vy));
     }
 
   public slots:

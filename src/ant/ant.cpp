@@ -27,8 +27,8 @@
 #include <limits>
 
 #define ANT_DEF_FRICTION 0.2
-#define ANT_DEF_MAX_FORCE 60.0
-#define ANT_DEF_MASS 10.0
+#define ANT_DEF_MAX_FORCE 1.0
+#define ANT_DEF_MASS 100.0
 #define ANT_DEF_VISION 150.0
 #define SPEED_ZERO_THRESHOLD 0.0001
 #define PI 3.141592653589793
@@ -49,21 +49,25 @@ Ant::Ant(int dim) : color(35, 250, 20)
     // max_force = std::numeric_limits<float>::max();
     max_force = ANT_DEF_MAX_FORCE;
     view_distance = ANT_DEF_VISION;
+    world_wid = 0;
+    world_hei = 0;
 }
 
-Ant::Ant(const Victor &pos) : color(35, 250, 20)
+Ant::Ant(const Victor &pos, const Victor &init_speed) : color(250, 250, 20)
 {
     int dim = position.is_2d() ? 2 : 3;
     id = Ant::next_id++;
     Ant::count_alive++;
     position = pos;
-    velocity = Victor(dim);
+    velocity = init_speed;
     accel = Victor(dim);
     mass = ANT_DEF_MASS;
     friction = ANT_DEF_FRICTION;
     // max_force = std::numeric_limits<float>::max();
     max_force = ANT_DEF_MAX_FORCE;
     view_distance = ANT_DEF_VISION;
+    world_wid = 0;
+    world_hei = 0;
 }
 
 Ant::~Ant()
@@ -93,7 +97,7 @@ Ant::advance(int phase)
         return;
     }
 
-    decision(960, 540);
+    decision();
     update();
     std::cerr << "Advancing " << *this << std::endl;
 }
@@ -143,27 +147,48 @@ Ant::wrap_around_position()
     // TODO: Understand why those 2 lines below do not work vs the long method
     // float wid = scene()->views()[0]->width();
     // float hei = scene()->views()[0]->height();
-    float wid = scene()->views()[0]->sceneRect().width();
-    float hei = scene()->views()[0]->sceneRect().height();
-    if (position[0] < -wid / 2.0) {
+    world_wid = scene()->views()[0]->sceneRect().width();
+    world_hei = scene()->views()[0]->sceneRect().height();
+    if (position[0] < -world_wid / 2.0) {
         do {
-            position[0] += wid;
-        } while (position[0] < -wid / 2.0);
-    } else if (position[0] > wid / 2.0) {
+            position[0] += world_wid;
+        } while (position[0] < -world_wid / 2.0);
+    } else if (position[0] > world_wid / 2.0) {
         do {
-            position[0] -= wid;
-        } while (position[0] > wid / 2.0);
+            position[0] -= world_wid;
+        } while (position[0] > world_wid / 2.0);
     }
 
-    if (position[1] < -hei / 2.0) {
+    if (position[1] < -world_hei / 2.0) {
         do {
-            position[1] += hei;
-        } while (position[1] < -hei / 2.0);
-    } else if (position[1] > hei / 2.0) {
+            position[1] += world_hei;
+        } while (position[1] < -world_hei / 2.0);
+    } else if (position[1] > world_hei / 2.0) {
         do {
-            position[1] -= hei;
-        } while (position[1] > hei / 2.0);
+            position[1] -= world_hei;
+        } while (position[1] > world_hei / 2.0);
     }
+}
+
+Victor
+Ant::point_to(const Ant &other) const
+{
+    if (world_hei == 0 || world_wid == 0) {
+        return Victor(0.0, 0.0);
+    }
+    Victor naive_vec = other.position - position;
+    if (naive_vec[0] > world_wid / 2.0) {
+        naive_vec -= world_wid;
+    } else if (naive_vec[0] < -world_wid / 2.0) {
+        naive_vec[0] += world_wid;
+    }
+    if (naive_vec[1] > world_hei / 2.0) {
+        naive_vec -= world_hei;
+    } else if (naive_vec[1] < -world_hei / 2.0) {
+        naive_vec[1] += world_hei;
+    }
+
+    return naive_vec;
 }
 
 QPainterPath
@@ -175,10 +200,14 @@ Ant::shape() const
 }
 
 void
-Ant::decision(float width, float height)
+Ant::decision()
 {
     // accel = capped_accel_to(Victor(width / 3.0, height / 4.0));
-    accel = capped_accel_towards(Victor(0.1, -0.025));
+    Victor decided_velocity(0.0, 0.0);
+    decided_velocity = 0.1 * decision_cohesion_velocity();
+    decided_velocity += 0.6 * decision_alignment_velocity();
+    decided_velocity += 0.3 * decision_separation_velocity();
+    accel = capped_accel_towards(decided_velocity);
     std::cerr << "Decided that accel = " << accel << " -> Force is "
               << mass * accel << " ( norm = " << (mass * accel).p_norm()
               << " )\n";
@@ -213,25 +242,23 @@ Victor
 Ant::decision_separation_velocity() const
 {
     // Choose a distance at which boids start avoiding each other
-    // TODO: Add a distance method to take wrap_around into account
     float separation = view_distance / 2;
     Victor desired(position.is_2d() ? 2 : 3);
-    QList<QGraphicsItem *> danger_ants = scene()->items(
-        QPolygonF() << mapToScene(0, 0) << mapToScene(-separation, -separation)
-                    << mapToScene(separation, -separation));
+    QList<QGraphicsItem *> danger_ants = scene()->items();
 
     foreach (QGraphicsItem *item, danger_ants) {
         if (item == this)
             continue;
-        QLineF line_to_rival(QPointF(0, 0), mapFromItem(item, 0, 0));
-        Victor weighted_diff = Victor(line_to_rival.dx(), line_to_rival.dy());
+        Victor to_rival = point_to(dynamic_cast<const Ant &>(*item));
+        if (to_rival.p_norm() > separation) {
+            continue;
+        }
+        Victor weighted_diff = -1 * to_rival;
         float dist = weighted_diff.p_norm();
         weighted_diff.p_normalize();
         weighted_diff /= dist;
         desired += weighted_diff;
     }
-
-    desired.p_normalize();
 
     return desired;
 }
@@ -243,11 +270,10 @@ Ant::decision_alignment_velocity() const
     QList<QGraphicsItem *> all_ants = scene()->items();
 
     foreach (QGraphicsItem *item, all_ants) {
-        // TODO : get item->velocity though item is not an Ant
-        // desired += item->velocity;
+        desired += dynamic_cast<Ant *>(item)->velocity;
     }
 
-    desired.p_normalize();
+    desired /= count_alive;
 
     return desired;
 }
@@ -259,8 +285,7 @@ Ant::decision_cohesion_velocity() const
     QList<QGraphicsItem *> all_ants = scene()->items();
 
     foreach (QGraphicsItem *item, all_ants) {
-        // TODO : get item->position though item is not an Ant
-        // desired += item->position;
+        desired += dynamic_cast<Ant *>(item)->position;
     }
     desired /= count_alive; // Now desired is the mean position
     desired -= position;    // Now desired is

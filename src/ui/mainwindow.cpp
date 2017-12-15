@@ -31,8 +31,11 @@ MainWindow::MainWindow(float dt) : main_view(new EngineView(dt))
     main_view->setSceneRect(-VIEW_DEFAULT_WIDTH / 2, -VIEW_DEFAULT_HEIGHT / 2,
                             VIEW_DEFAULT_WIDTH, VIEW_DEFAULT_HEIGHT);
 
-    main_view->add_ant(-30, -90);
-    main_view->add_ant(30, 90);
+    main_view->add_ant(-30, -90, 1, 1);
+    main_view->add_ant(30, 90, 1, 1);
+    main_view->add_ant(25, -60, -1, -1);
+    main_view->add_ant(10, 150, -1, -1);
+    main_view->add_ant(-50, 60, -1, -1);
 
     createActions();
     createStatusBar();

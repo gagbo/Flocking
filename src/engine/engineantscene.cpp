@@ -35,9 +35,9 @@ EngineAntScene::~EngineAntScene()
 }
 
 void
-EngineAntScene::add_ant(Victor position)
+EngineAntScene::add_ant(Victor position, Victor velocity)
 {
-    Ant *new_ant = new Ant(position);
+    Ant *new_ant = new Ant(position, velocity);
     ant_list.push_back(new_ant);
     new_ant->set_dt(time_step);
     addItem(new_ant);

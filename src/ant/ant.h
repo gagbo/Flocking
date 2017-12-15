@@ -39,10 +39,13 @@ class Ant : public QGraphicsItem
     //! Construct a new Ant at position
     Ant(const Victor &position);
 
+    //! Construct a new Ant at position with inital velocity
+    Ant(const Victor &position, const Victor &init_speed = Victor(0, 0));
+
     /////////////// Destructor
     ~Ant();
 
-    /////////////// Methods
+    /////////////// Misc. Methods
 
     //! Give an approximate bounding rectangle for the Ant
     QRectF boundingRect() const override;
@@ -64,8 +67,13 @@ class Ant : public QGraphicsItem
      */
     void wrap_around_position();
 
+    //! Compute the smallest vector to other Ant in wrap around universe
+    Victor point_to(const Ant &other) const;
+
     //! Decide where to go. Set acceleration properly to prepare for update
-    void decision(float width, float height);
+    void decision();
+
+    /////////////// Steering methods
 
     //! Return the capped accel needed to reach target
     /*! \param target should be the position of the target
@@ -113,6 +121,8 @@ class Ant : public QGraphicsItem
     Victor decision_alignment_velocity() const;
     Victor decision_cohesion_velocity() const;
 
+    /////////////// Accessors and output
+
     inline float
     x() const
     {
@@ -149,5 +159,7 @@ class Ant : public QGraphicsItem
     QColor color;        //!< Color
     float time_step;     //!< Time step given from the engine
     float view_distance; //!< View distance
+    float world_wid;
+    float world_hei;
 };
 #endif // _ANT_ANT_H_

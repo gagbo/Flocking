@@ -33,7 +33,7 @@ class EngineAntScene : public QGraphicsScene
     EngineAntScene(float dt = DEFAULT_TIMESTEP, int dim = 2);
     ~EngineAntScene();
 
-    void add_ant(Victor position);
+    void add_ant(Victor position, Victor velocity = Victor(0, 0));
 
     inline float
     dt()
