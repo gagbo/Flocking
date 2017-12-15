@@ -203,6 +203,7 @@ void
 Ant::decision()
 {
     // accel = capped_accel_to(Victor(width / 3.0, height / 4.0));
+    all_ants = scene()->items();
     Victor decided_velocity(0.0, 0.0);
     decided_velocity = 0.1 * decision_cohesion_velocity();
     decided_velocity += 0.5 * decision_alignment_velocity();
@@ -244,9 +245,8 @@ Ant::decision_separation_velocity() const
     // Choose a distance at which boids start avoiding each other
     float separation = view_distance / 2;
     Victor desired(position.is_2d() ? 2 : 3);
-    QList<QGraphicsItem *> danger_ants = scene()->items();
 
-    foreach (QGraphicsItem *item, danger_ants) {
+    foreach (QGraphicsItem *item, all_ants) {
         if (item == this)
             continue;
         Victor to_rival = point_to(dynamic_cast<const Ant &>(*item));
@@ -267,7 +267,6 @@ Victor
 Ant::decision_alignment_velocity() const
 {
     Victor desired(position.is_2d() ? 2 : 3);
-    QList<QGraphicsItem *> all_ants = scene()->items();
 
     foreach (QGraphicsItem *item, all_ants) {
         desired += dynamic_cast<Ant *>(item)->velocity;
@@ -282,7 +281,6 @@ Victor
 Ant::decision_cohesion_velocity() const
 {
     Victor desired(position.is_2d() ? 2 : 3);
-    QList<QGraphicsItem *> all_ants = scene()->items();
 
     foreach (QGraphicsItem *item, all_ants) {
         desired += dynamic_cast<Ant *>(item)->position;

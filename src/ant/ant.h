@@ -161,5 +161,6 @@ class Ant : public QGraphicsItem
     float view_distance; //!< View distance
     float world_wid;
     float world_hei;
+    QList<QGraphicsItem *> all_ants;
 };
 #endif // _ANT_ANT_H_
