@@ -256,7 +256,7 @@ Ant::decision_separation_velocity() const
         Victor weighted_diff = -1 * to_rival;
         float dist = weighted_diff.p_norm();
         weighted_diff.p_normalize();
-        weighted_diff /= dist;
+        weighted_diff /= pow(dist, 0.2);
         desired += weighted_diff;
     }
 
@@ -268,11 +268,19 @@ Ant::decision_alignment_velocity() const
 {
     Victor desired(position.is_2d() ? 2 : 3);
 
+    int considered_neigbours = 0;
     foreach (QGraphicsItem *item, all_ants) {
+        Victor to_rival = point_to(dynamic_cast<const Ant &>(*item));
+        if (to_rival.p_norm() > view_distance) {
+            continue;
+        }
+        ++considered_neigbours;
         desired += dynamic_cast<Ant *>(item)->velocity;
     }
 
-    //desired /= count_alive;
+    if (considered_neigbours) {
+        desired /= considered_neigbours;
+    }
 
     return desired;
 }
