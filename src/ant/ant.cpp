@@ -40,6 +40,8 @@
 
 uint Ant::next_id = 0;
 uint Ant::count_alive = 0;
+const QPointF Ant::triangle_body[3] = {QPointF(-10.0, 20.0),
+                                       QPointF(10.0, 20.0), QPointF(0, -20.0)};
 
 Ant::Ant(int dim) : color(35, 250, 20)
 {
@@ -121,7 +123,8 @@ Ant::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     if (velocity.p_norm() < SPEED_ZERO_THRESHOLD) {
         painter->setBrush(Qt::darkBlue);
     }
-    painter->drawEllipse(-10, -20, 20, 40);
+    // painter->drawEllipse(-10, -20, 20, 40);
+    painter->drawPolygon(triangle_body, 3);
 
     // Eyes
     painter->setBrush(Qt::white);

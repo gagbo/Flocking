@@ -31,6 +31,7 @@ class Ant : public QGraphicsItem
   public:
     static uint next_id;     //!< Id to use for the next created Ant
     static uint count_alive; //!< Counts the number of Ant currently allocated
+    static const QPointF triangle_body[3]; //!< Points to draw a triangle body
     /////////////// Constructors
 
     //! Construct a new Ant to move in d dimensions (default 2)
