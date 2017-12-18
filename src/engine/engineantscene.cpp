@@ -19,6 +19,7 @@
  */
 
 #include "engineantscene.h"
+#include <QGraphicsSceneMouseEvent>
 
 EngineAntScene::EngineAntScene(float dt, int dim)
     : dimension(dim), time_step(dt)
@@ -42,4 +43,16 @@ EngineAntScene::add_ant(Victor position, Victor velocity)
     new_ant->set_dt(time_step);
     addItem(new_ant);
     new_ant->update(); // Called so the ant is at the right pos on first frame
+}
+
+void
+EngineAntScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (event->button() != Qt::LeftButton) {
+        return;
+    }
+
+    float x = event->scenePos().x();
+    float y = event->scenePos().y();
+    emit message(QString("Clicked at (%1,%2)").arg(x).arg(y));
 }

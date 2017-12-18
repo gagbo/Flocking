@@ -27,8 +27,12 @@
 #include <vector>
 #define DEFAULT_TIMESTEP 1
 
+class QGraphicsSceneMouseEvent;
+
 class EngineAntScene : public QGraphicsScene
 {
+    Q_OBJECT
+
   public:
     EngineAntScene(float dt = DEFAULT_TIMESTEP, int dim = 2);
     ~EngineAntScene();
@@ -53,10 +57,15 @@ class EngineAntScene : public QGraphicsScene
         time_step = dt;
     }
 
+  signals:
+    void message(QString);
+
   protected:
     std::vector<Ant *> ant_list;
     int dimension;
     float time_step;
+
+    void mousePressEvent(QGraphicsSceneMouseEvent *);
 };
 
 #endif // _ENGINE_ENGINEANTSCENE_H_

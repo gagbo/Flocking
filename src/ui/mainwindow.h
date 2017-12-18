@@ -40,6 +40,10 @@ class MainWindow : public QMainWindow
   protected:
     void closeEvent(QCloseEvent *event) override;
 
+  public slots:
+    //! Show message in status bar
+    void showMessage(QString message);
+
   private slots:
 
   private:

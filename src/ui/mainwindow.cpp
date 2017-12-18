@@ -59,6 +59,9 @@ MainWindow::MainWindow(float dt) : main_view(new EngineView(dt))
          (WINDOW_DEFAULT_HEIGHT - height()) / 2);
 
     setUnifiedTitleAndToolBarOnMac(true);
+
+    connect(main_view->getScene(), SIGNAL(message(QString)), this,
+            SLOT(showMessage(QString)));
 }
 
 void
@@ -71,10 +74,22 @@ MainWindow::closeEvent(QCloseEvent *event)
 void
 MainWindow::createActions()
 {
+    menuBar()->addMenu("&File");
+    menuBar()->addMenu("&Edit");
+    menuBar()->addMenu("&View");
+    menuBar()->addMenu("&Simulate");
+    menuBar()->addMenu("&Help");
 }
 
 void
 MainWindow::createStatusBar()
 {
     statusBar()->showMessage(tr("Ready"));
+}
+
+void
+MainWindow::showMessage(QString msg)
+{
+    // display message on main window status bar
+    statusBar()->showMessage(msg);
 }
