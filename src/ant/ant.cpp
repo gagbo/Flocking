@@ -105,7 +105,7 @@ Ant::advance(int phase)
 
     decision();
     update();
-    std::cerr << "Advancing " << *this << std::endl;
+    // std::cerr << "Advancing " << *this << std::endl;
 }
 
 QRectF
@@ -216,17 +216,20 @@ Ant::decision()
     decided_velocity += 0.5 * decision_alignment_velocity();
     decided_velocity += 0.375 * decision_separation_velocity();
     accel = capped_accel_towards(decided_velocity);
-    std::cerr << "Decided that accel = " << accel << " -> Force is "
-              << mass * accel << " ( norm = " << (mass * accel).p_norm()
-              << " )\n";
+    /* std::cerr << "Decided that accel = " << accel << " -> Force is "
+     *           << mass * accel << " ( norm = " << (mass * accel).p_norm()
+     *           << " )\n";
+     */
 }
 
 Victor
 Ant::accel_to(const Victor &target) const
 {
     Victor desired_velocity = target - position;
-    std::cerr << "Distance to " << target << " is " << desired_velocity.p_norm()
-              << "\n";
+    /* std::cerr << "Distance to " << target << " is " <<
+     * desired_velocity.p_norm()
+     *           << "\n";
+     */
     desired_velocity /= time_step;
     Victor desired_accel = desired_velocity - velocity;
     desired_accel /= time_step;
