@@ -91,8 +91,9 @@ class Ant : public QGraphicsItem
     {
         Victor fake_target = position + time_step * target_velocity;
         Victor result = capped_accel_to(fake_target);
-        std::cerr << "capped_accel towards : " << target_velocity << " is "
-                  << result << "\n";
+        /* std::cerr << "capped_accel towards : " << target_velocity << " is "
+         *           << result << "\n";
+         */
         return result;
     }
 
