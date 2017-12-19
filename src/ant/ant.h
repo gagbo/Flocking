@@ -154,6 +154,7 @@ class Ant : public QGraphicsItem
     int id;              //!< Global Ant Id
     Victor position;     //!< Position
     Victor velocity;     //!< Velocity
+    float vel_angle;     //!< Current angle of the velocity
     Victor accel;        //!< Acceleration
     float mass;          //!< Mass of the Ant
     float friction;      //!< Friction seen by the ant
@@ -161,8 +162,9 @@ class Ant : public QGraphicsItem
     QColor color;        //!< Color
     float time_step;     //!< Time step given from the engine
     float view_distance; //!< View distance
+    float view_angle;
     float world_wid;
     float world_hei;
-    QList<QGraphicsItem *> all_ants;
+    QList<QGraphicsItem *> neighbour_ants;
 };
 #endif // _ANT_ANT_H_

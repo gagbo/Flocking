@@ -29,14 +29,15 @@
 #define ANT_DEF_FRICTION 0.1
 #define ANT_DEF_MAX_FORCE 1
 #define ANT_DEF_MASS 1000.0
-#define ANT_DEF_VISION 200.0
+#define ANT_DEF_VISION 50.0
+#define ANT_DEF_VIEW_ANGLE 100.0
 
 #define SPEED_ZERO_THRESHOLD 0.0001
 #define PI 3.141592653589793
 #define RAD_TO_DEG 180.0 / PI
 
 #define CRUISE_SPEED 15.0
-#define SEPARATION_POTENTIAL_EXP 1.0
+#define SEPARATION_POTENTIAL_EXP 0.5
 
 uint Ant::next_id = 0;
 uint Ant::count_alive = 0;
@@ -55,6 +56,7 @@ Ant::Ant(int dim) : color(35, 250, 20)
     // max_force = std::numeric_limits<float>::max();
     max_force = ANT_DEF_MAX_FORCE;
     view_distance = ANT_DEF_VISION;
+    view_angle = ANT_DEF_VIEW_ANGLE;
     world_wid = 0;
     world_hei = 0;
 }
@@ -72,6 +74,7 @@ Ant::Ant(const Victor &pos, const Victor &init_speed) : color(250, 250, 20)
     // max_force = std::numeric_limits<float>::max();
     max_force = ANT_DEF_MAX_FORCE;
     view_distance = ANT_DEF_VISION;
+    view_angle = ANT_DEF_VIEW_ANGLE;
     world_wid = 0;
     world_hei = 0;
 }
@@ -144,7 +147,8 @@ Ant::update()
     wrap_around_position();
 
     accel.zero();
-    setRotation(180 - RAD_TO_DEG * std::atan2(velocity[0], velocity[1]));
+    vel_angle = 180 - RAD_TO_DEG * std::atan2(velocity[0], velocity[1]) ;
+    setRotation(vel_angle);
     setPos(position[0], position[1]);
 }
 
@@ -210,7 +214,26 @@ void
 Ant::decision()
 {
     // accel = capped_accel_to(Victor(width / 3.0, height / 4.0));
-    all_ants = scene()->items();
+    neighbour_ants = scene()->items();
+    neighbour_ants.clear();
+    for (auto other_ant : scene()->items()) {
+        if (other_ant == this) {
+            neighbour_ants.push_back(other_ant);
+            continue;
+        }
+        Victor to_other = point_to(*dynamic_cast<Ant *>(other_ant));
+        if (to_other.p_norm() > view_distance) {
+            continue;
+        }
+        float angle = vel_angle;
+        angle -= 180 - RAD_TO_DEG * std::atan2(to_other[0], to_other[1]) ;
+        
+        if (abs(angle) > view_angle && (360- abs(angle)) > view_angle) {
+            continue;
+        }
+        
+        neighbour_ants.push_back(other_ant);
+    }
     Victor decided_velocity(0.0, 0.0);
     decided_velocity = 0.125 * decision_cohesion_velocity();
     decided_velocity += 0.5 * decision_alignment_velocity();
@@ -253,20 +276,16 @@ Victor
 Ant::decision_separation_velocity() const
 {
     // Choose a distance at which boids start avoiding each other
-    float separation = view_distance / 2;
     Victor desired(position.is_2d() ? 2 : 3);
 
-    foreach (QGraphicsItem *item, all_ants) {
+    foreach (QGraphicsItem *item, neighbour_ants) {
         if (item == this)
             continue;
         Victor to_rival = point_to(dynamic_cast<const Ant &>(*item));
-        if (to_rival.p_norm() > separation) {
-            continue;
-        }
         Victor weighted_diff = -1 * to_rival;
         float dist = weighted_diff.p_norm();
         weighted_diff.p_normalize();
-        weighted_diff /= pow(dist, SEPARATION_POTENTIAL_EXP);
+        weighted_diff /= pow(dist/view_angle, SEPARATION_POTENTIAL_EXP);
         desired += weighted_diff;
     }
     desired.p_normalize();
@@ -281,11 +300,7 @@ Ant::decision_alignment_velocity() const
     Victor desired(position.is_2d() ? 2 : 3);
 
     int considered_neigbours = 0;
-    foreach (QGraphicsItem *item, all_ants) {
-        Victor to_rival = point_to(dynamic_cast<const Ant &>(*item));
-        if (to_rival.p_norm() > view_distance) {
-            continue;
-        }
+    foreach (QGraphicsItem *item, neighbour_ants) {
         ++considered_neigbours;
         desired += dynamic_cast<Ant *>(item)->velocity;
     }
@@ -305,7 +320,7 @@ Ant::decision_cohesion_velocity() const
 {
     Victor desired(position.is_2d() ? 2 : 3);
 
-    foreach (QGraphicsItem *item, all_ants) {
+    foreach (QGraphicsItem *item, neighbour_ants) {
         desired += point_to(dynamic_cast<Ant &>(*item));
     }
     desired /= count_alive; // Now desired is the mean position

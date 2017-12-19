@@ -1,7 +1,7 @@
 project (Flocking-main)
 
 set (Flocking_VERSION_MAJOR 0)
-set (Flocking_VERSION_MINOR 3)
+set (Flocking_VERSION_MINOR 4)
 
 
 # configure a header file to pass some of the CMake settings
