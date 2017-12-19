@@ -10,9 +10,7 @@ in C++.
 ## Dependencies
 
 The application (compilation and execution) has only been tested with :
-- CMake 3.10 (qt5\_use\_modules is necessary, and compilation flags are
-  probably properly set only with CMake 3.10 in current version ;
-  see the [documentation](http://doc.qt.io/qt-5/cmake-manual.html))
+- CMake 3.8 (to use directly Qt5::Widgets in target\_link\_libraries)
 - Qt 5.9.2
 - GCC 7.2.1
 
