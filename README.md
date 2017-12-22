@@ -1,4 +1,4 @@
-# Flocking
+# Flocking [![Build Status](https://travis-ci.org/gagbo/Flocking.svg?branch=master)](https://travis-ci.org/gagbo/Flocking)
 
 Implementation of Emergence through flocking autonomous agents in C++.
 This little project is inspired by
