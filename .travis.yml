@@ -16,6 +16,7 @@ script:
     - cd build
     - cmake ..
     - make
+    - install/bin/test_geometry
     - ctest
 
 compiler:
