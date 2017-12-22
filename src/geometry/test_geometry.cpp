@@ -26,6 +26,7 @@ class TestGeometry: public QObject
     Q_OBJECT
 private slots:
     void addition(void);
+    void dummy_true(void);
 };
 
 void TestGeometry::addition(void)
@@ -35,6 +36,12 @@ void TestGeometry::addition(void)
     Victor result(4, 6);
     QCOMPARE(first + second, result);
 }
+
+void TestGeometry::dummy_true()
+{
+    QCOMPARE(true, true);
+}
+
 
 QTEST_MAIN(TestGeometry)
 #include "test_geometry.moc"
