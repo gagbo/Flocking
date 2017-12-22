@@ -66,6 +66,9 @@ class EngineAntScene : public QGraphicsScene
     std::vector<Ant *> ant_list;
     int dimension;
     float time_step;
+    QColor border_color;
+
+    void drawForeground(QPainter *, const QRectF &);
 
     void mousePressEvent(QGraphicsSceneMouseEvent *);
     void wheelEvent(QGraphicsSceneWheelEvent *);

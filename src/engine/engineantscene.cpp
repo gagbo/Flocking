@@ -20,9 +20,11 @@
 
 #include "engineantscene.h"
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
+#include <QPainter>
 
 EngineAntScene::EngineAntScene(float dt, int dim)
-    : dimension(dim), time_step(dt)
+    : dimension(dim), time_step(dt), border_color(100, 255, 100)
 {
     setItemIndexMethod(QGraphicsScene::BspTreeIndex);
 }
@@ -43,6 +45,20 @@ EngineAntScene::add_ant(Victor position, Victor velocity)
     new_ant->set_dt(time_step);
     addItem(new_ant);
     new_ant->update(); // Called so the ant is at the right pos on first frame
+}
+
+void
+EngineAntScene::drawForeground(QPainter *painter, const QRectF &rect)
+{
+    (void)rect; // We are not using the inherited parameter
+
+    painter->setBrush(Qt::NoBrush);
+    QPen pen(border_color, 3, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+    painter->setPen(pen);
+
+    float wid = views()[0]->sceneRect().width();
+    float hei = views()[0]->sceneRect().height();
+    painter->drawRect(QRectF(-wid / 2.0, -hei / 2.0, wid, hei));
 }
 
 void
