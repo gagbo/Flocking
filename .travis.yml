@@ -9,7 +9,11 @@ before_install:
     - sudo add-apt-repository --yes ppa:beineri/opt-qt591-trusty
     - sudo apt-get update -qq
     - sudo apt-get install qt59base qtbase5-dev
-    - export DISPLAY=:0
+
+before_script:
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+    - sleep 3
 
 script:
     - source /opt/qt59/bin/qt59-env.sh
