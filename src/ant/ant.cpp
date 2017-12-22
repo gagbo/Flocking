@@ -147,7 +147,7 @@ Ant::update()
     wrap_around_position();
 
     accel.zero();
-    vel_angle = 180 - RAD_TO_DEG * std::atan2(velocity[0], velocity[1]) ;
+    vel_angle = 180 - RAD_TO_DEG * std::atan2(velocity[0], velocity[1]);
     setRotation(vel_angle);
     setPos(position[0], position[1]);
 }
@@ -226,12 +226,13 @@ Ant::decision()
             continue;
         }
         float angle = vel_angle;
-        angle -= 180 - RAD_TO_DEG * std::atan2(to_other[0], to_other[1]) ;
-        
-        if (abs(angle) > view_angle && (360- abs(angle)) > view_angle) {
+        angle -= 180 - RAD_TO_DEG * std::atan2(to_other[0], to_other[1]);
+
+        if (std::abs(angle) > view_angle &&
+            (360 - std::abs(angle)) > view_angle) {
             continue;
         }
-        
+
         neighbour_ants.push_back(other_ant);
     }
     Victor decided_velocity(0.0, 0.0);
@@ -285,7 +286,7 @@ Ant::decision_separation_velocity() const
         Victor weighted_diff = -1 * to_rival;
         float dist = weighted_diff.p_norm();
         weighted_diff.p_normalize();
-        weighted_diff /= pow(dist/view_angle, SEPARATION_POTENTIAL_EXP);
+        weighted_diff /= pow(dist / view_angle, SEPARATION_POTENTIAL_EXP);
         desired += weighted_diff;
     }
     desired.p_normalize();
