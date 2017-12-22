@@ -35,7 +35,8 @@ void TestGeometry::addition(void)
     Victor first(1., 2.);
     Victor second(3., 4.);
     Victor result(4., 6.);
-    QCOMPARE(first + second, result);
+    QCOMPARE(first[0] + second[0], result[0]);
+    QCOMPARE(first[1] + second[1], result[1]);
 }
 
 void TestGeometry::substraction(void)
@@ -43,7 +44,8 @@ void TestGeometry::substraction(void)
     Victor first(1., 6.);
     Victor second(3., 4.);
     Victor result(-2., 2.);
-    QCOMPARE(first - second, result);
+    QCOMPARE(first[0] - second[0], result[0]);
+    QCOMPARE(first[1] - second[1], result[1]);
 }
 
 void TestGeometry::multiplication(void)
@@ -51,7 +53,8 @@ void TestGeometry::multiplication(void)
     float coef(1.2);
     Victor second(3., 4.);
     Victor result(3.6, 4.8);
-    QCOMPARE(coef * second, result);
+    QCOMPARE(coef * second[0], result[0]);
+    QCOMPARE(coef * second[1], result[1]);
 }
 
 
