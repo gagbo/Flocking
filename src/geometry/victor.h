@@ -103,6 +103,7 @@ class Victor
     Victor &operator-=(const Victor &rhs);
     friend Victor operator*(float coef, const Victor &rhs);
     friend std::ostream &operator<<(std::ostream &os, const Victor &v);
+    bool operator==(const Victor &rhs) const;
 
   protected:
     int d;

@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.8)
 set(CMAKE_CXX_STANDARAD 14)
 project (Flocking)
 
-find_package (Qt5 5.9 COMPONENTS Widgets REQUIRED QUIET)
+find_package (Qt5 5.9 COMPONENTS Widgets Test REQUIRED QUIET)
 
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTORCC ON)

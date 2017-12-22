@@ -183,3 +183,17 @@ operator<<(std::ostream &os, const Victor &v)
     os << v[v.d - 1];
     return os;
 }
+
+bool
+Victor::operator==(const Victor &rhs) const
+{
+    if (d != rhs.d) {
+        return false;
+    }
+    for (int i = 0; i < d; ++i) {
+        if (coord[i] != rhs[i]) {
+            return false;
+        }
+    }
+    return true;
+}
