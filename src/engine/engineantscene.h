@@ -59,6 +59,8 @@ class EngineAntScene : public QGraphicsScene
 
   signals:
     void message(QString);
+    void scale_change(float);
+    void scale_reset(void);
 
   protected:
     std::vector<Ant *> ant_list;
@@ -66,6 +68,7 @@ class EngineAntScene : public QGraphicsScene
     float time_step;
 
     void mousePressEvent(QGraphicsSceneMouseEvent *);
+    void wheelEvent(QGraphicsSceneWheelEvent *);
 };
 
 #endif // _ENGINE_ENGINEANTSCENE_H_

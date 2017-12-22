@@ -48,11 +48,20 @@ class EngineView : public QGraphicsView
     }
 
   public slots:
+    void change_scale(float scale_factor);
+    inline void
+    reset_scale()
+    {
+        scale(1 / xy_scale, 1 / xy_scale);
+        xy_scale = 1.0;
+        return;
+    }
 
   protected:
   private:
     EngineAntScene *ant_engine;
     QBrush background;
+    float xy_scale;
 };
 
 #endif // _UI_ENGINEVIEW_H_

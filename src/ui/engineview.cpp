@@ -34,9 +34,23 @@ EngineView::EngineView(float dt)
 
     background = QBrush(QColor(64, 32, 64));
     setBackgroundBrush(background);
+
+    xy_scale = 1;
+    connect(ant_engine, SIGNAL(scale_change(float)), this,
+            SLOT(change_scale(float)));
+    connect(ant_engine, SIGNAL(scale_reset(void)), this,
+            SLOT(reset_scale(void)));
 }
 
 EngineView::~EngineView()
 {
     delete ant_engine;
+}
+
+void
+EngineView::change_scale(float scale_factor)
+{
+    xy_scale *= scale_factor;
+    scale(scale_factor, scale_factor);
+    return;
 }

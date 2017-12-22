@@ -48,11 +48,25 @@ EngineAntScene::add_ant(Victor position, Victor velocity)
 void
 EngineAntScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (event->button() != Qt::LeftButton) {
-        return;
+    Qt::MouseButton pressed_button = event->button();
+    if (pressed_button == Qt::LeftButton) {
+        float x = event->scenePos().x();
+        float y = event->scenePos().y();
+        emit message(QString("Clicked at (%1,%2)").arg(x).arg(y));
+    } else if (pressed_button == Qt::MiddleButton) {
+        emit scale_reset();
     }
+    return;
+}
 
-    float x = event->scenePos().x();
-    float y = event->scenePos().y();
-    emit message(QString("Clicked at (%1,%2)").arg(x).arg(y));
+void
+EngineAntScene::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    int eighths_deg = event->delta(); // >0 means scrolling up
+    int direction = eighths_deg > 0 ? 1 : -1;
+    float scale_factor = 1;
+
+    scale_factor += 0.2 * direction;
+
+    emit scale_change(scale_factor);
 }
