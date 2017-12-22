@@ -14,4 +14,6 @@ set (BUILD_SHARED_LIBS OFF)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra")
 
+enable_testing()
+
 add_subdirectory(src)
