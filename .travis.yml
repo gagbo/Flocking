@@ -1,6 +1,10 @@
 language: cpp
 compiler: gcc
 
+branches:
+    only:
+        - master
+
 addons:
     # Install lcov for codecoverage
     apt:
