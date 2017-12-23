@@ -75,8 +75,9 @@ void TestGeometry::addition(void)
     Victor result(4., 6.);
     
     // Classic operator
-    QCOMPARE(first[0] + second[0], result[0]);
-    QCOMPARE(first[1] + second[1], result[1]);
+    Victor test_victor = first + second;
+    QCOMPARE(test_victor[0], result[0]);
+    QCOMPARE(test_victor[1], result[1]);
     
     // Assignment operation
     first += second;
@@ -92,8 +93,9 @@ void TestGeometry::substraction(void)
     Victor result(-2., 2.);
     
     // Classic operator
-    QCOMPARE(first[0] - second[0], result[0]);
-    QCOMPARE(first[1] - second[1], result[1]);
+    Victor test_victor = first - second;
+    QCOMPARE(test_victor[0], result[0]);
+    QCOMPARE(test_victor[1], result[1]);
     
     // Assignment operation
     first -= second;
@@ -109,8 +111,9 @@ void TestGeometry::multiplication(void)
     Victor result(3.6, 4.8);
     
     // Classic operator
-    QCOMPARE(coef * second[0], result[0]);
-    QCOMPARE(coef * second[1], result[1]);
+    Victor test_victor = coef * second;
+    QCOMPARE(test_victor[0], result[0]);
+    QCOMPARE(test_victor[1], result[1]);
     
     // Assignment operation
     second *= coef;
