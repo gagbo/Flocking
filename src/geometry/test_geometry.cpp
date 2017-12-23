@@ -193,10 +193,13 @@ TestGeometry::multiplication_data(void)
     QTest::addColumn<Victor>("second");
     QTest::addColumn<Victor>("result");
 
-    QTest::newRow("Simple positive") << 1.2 << Victor(3, 4) << Victor(3.6, 4.8);
+    QTest::newRow("Simple positive")
+        << static_cast<float>(1.2) << Victor(3, 4) << Victor(3.6, 4.8);
     QTest::newRow("Fraction and negative")
-        << -1 / 7. << Victor(1 / 12., -49.) << Victor(-1 / 84., 7);
-    QTest::newRow("Try 0") << 0 << Victor(1, 1) << Victor(0, 0);
+        << static_cast<float>(-1 / 7.) << Victor(1 / 12., -49.)
+        << Victor(-1 / 84., 7);
+    QTest::newRow("Try 0") << static_cast<float>(0) << Victor(1, 1)
+                           << Victor(0, 0);
 }
 
 void
@@ -225,9 +228,11 @@ TestGeometry::division_data(void)
     QTest::addColumn<Victor>("second");
     QTest::addColumn<Victor>("result");
 
-    QTest::newRow("Simple positive") << 1.2 << Victor(3.6, 4.8) << Victor(3, 4);
+    QTest::newRow("Simple positive")
+        << static_cast<float>(1.2) << Victor(3.6, 4.8) << Victor(3, 4);
     QTest::newRow("Fraction and negative")
-        << -1 / 7. << Victor(-1 / 84., 7.) << Victor(1 / 12., -49.);
+        << static_cast<float>(-1 / 7.) << Victor(-1 / 84., 7.)
+        << Victor(1 / 12., -49.);
 }
 
 void
@@ -265,11 +270,14 @@ TestGeometry::p_norm_data(void)
 
     QTest::newRow("2-norm of non null vector")
         << Victor(2.3, -1.0) << 2
-        << std::pow(std::pow(2.3, 2) + std::pow(-1.0, 2), 0.5);
+        << static_cast<float>(
+               std::pow(std::pow(2.3, 2) + std::pow(-1.0, 2), 0.5));
     QTest::newRow("3-norm of non null vector")
         << Victor(2.3, -1.0) << 3
-        << std::pow(std::pow(2.3, 3) + std::pow(1.0, 3), 1 / 3.);
-    QTest::newRow("2-norm of null vector") << Victor(0.0, 0.0) << 2 << 0.0;
+        << static_cast<float>(
+               std::pow(std::pow(2.3, 3) + std::pow(1.0, 3), 1 / 3.));
+    QTest::newRow("2-norm of null vector")
+        << Victor(0.0, 0.0) << 2 << static_cast<float>(0.0);
 }
 
 void
