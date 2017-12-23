@@ -36,7 +36,7 @@
 #define PI 3.141592653589793
 #define RAD_TO_DEG 180.0 / PI
 
-#define CRUISE_SPEED 15.0
+#define CRUISE_SPEED 1500.0
 #define SEPARATION_POTENTIAL_EXP 0.5
 
 uint Ant::next_id = 0;
@@ -286,7 +286,8 @@ Ant::decision_separation_velocity() const
         Victor weighted_diff = -1 * to_rival;
         float dist = weighted_diff.p_norm();
         weighted_diff.p_normalize();
-        weighted_diff /= pow(dist / view_angle, SEPARATION_POTENTIAL_EXP);
+        weighted_diff /= pow((dist + view_distance / 4.0) / view_angle,
+                             SEPARATION_POTENTIAL_EXP);
         desired += weighted_diff;
     }
     desired.p_normalize();
