@@ -70,7 +70,7 @@ Victor::p_distance(const Victor &other, int p) const
     double norm = 0; // double because of the exponentiation
 
     for (int i = 0; i < dim; ++i) {
-        norm += std::pow((coord[i] - other[i]), p);
+        norm += std::pow(std::abs(coord[i] - other[i]), p);
     }
 
     return std::pow(norm, 1.0 / p);
