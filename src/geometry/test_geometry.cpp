@@ -29,6 +29,7 @@ private slots:
     void access(void);
     void comparison(void);
     
+    void pure_assignment(void);
     void addition(void);
     void substraction(void);
     void multiplication(void);
@@ -66,6 +67,21 @@ void TestGeometry::comparison()
     QCOMPARE(first == second, expected);
     
 }
+
+void TestGeometry::pure_assignment()
+{
+    // Data
+    Victor first(0.0, 0.0);
+    float coord1 = -1.9;
+    float coord2 = 24.2;
+    const Victor second(coord1, coord2);
+    
+    // Test
+    first = second;
+    QCOMPARE(first[0], second[0]);
+    QCOMPARE(first[1], second[1]);
+}
+
 
 void TestGeometry::addition(void)
 {
