@@ -31,6 +31,7 @@ class TestGeometry : public QObject
     void access(void);
     void comparison(void);
     void comparison_data(void);
+    void zero(void);
 
     void pure_assignment(void);
     void addition(void);
@@ -47,7 +48,6 @@ class TestGeometry : public QObject
     void p_norm_data(void);
     void p_normalize(void);
     void p_normalize_data(void);
-    void zero(void);
 };
 
 void
