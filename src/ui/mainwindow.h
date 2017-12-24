@@ -25,12 +25,23 @@
 #include "engineview.h"
 #include <QtWidgets>
 
+#define WINDOW_DEFAULT_WIDTH 1440.0
+#define WINDOW_DEFAULT_HEIGHT 768.0
+#define VIEW_DEFAULT_WIDTH 3840.0
+#define VIEW_DEFAULT_HEIGHT 2160.0
+#define ANT_DEFAULT_COUNT 100
+#define LO_SPEED -20.0
+#define HI_SPEED 20.0
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
   public:
-    MainWindow(float dt);
+    MainWindow(float dt, int ant_count = ANT_DEFAULT_COUNT, float world_wid = VIEW_DEFAULT_WIDTH,
+        float world_hei = VIEW_DEFAULT_HEIGHT, float min_speed = LO_SPEED, float max_speed = HI_SPEED,
+        float win_wid = WINDOW_DEFAULT_WIDTH, float win_hei = WINDOW_DEFAULT_HEIGHT
+    );
     inline EngineAntScene *
     getScene()
     {

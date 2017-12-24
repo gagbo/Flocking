@@ -52,7 +52,10 @@ main(int argc, char *argv[])
     parser.process(app);
 
     float time_step = 1000.0 / 50.0;
-    MainWindow mainWin(time_step);
+    int ant_starting_count = 200;
+    float world_width = 3160.0;
+    float world_height = 2160.0;
+    MainWindow mainWin(time_step, ant_starting_count, world_width, world_height);
     mainWin.show();
 
     QTimer timer;
