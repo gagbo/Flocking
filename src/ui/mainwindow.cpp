@@ -20,43 +20,35 @@
 
 #include "mainwindow.h"
 
-#define WINDOW_DEFAULT_WIDTH 1440.0
-#define WINDOW_DEFAULT_HEIGHT 768.0
-#define VIEW_DEFAULT_WIDTH 3840.0
-#define VIEW_DEFAULT_HEIGHT 2160.0
-#define ANT_DEFAULT_COUNT 100
-#define LO_SPEED -20.0
-#define HI_SPEED 20.0
-
-MainWindow::MainWindow(float dt) : main_view(new EngineView(dt))
+MainWindow::MainWindow(float dt, int ant_count, float world_wid, float world_hei, float min_speed, float max_speed, float win_wid, float win_hei) : main_view(new EngineView(dt))
 {
     setCentralWidget(main_view);
-    main_view->setSceneRect(-VIEW_DEFAULT_WIDTH / 2, -VIEW_DEFAULT_HEIGHT / 2,
-                            VIEW_DEFAULT_WIDTH, VIEW_DEFAULT_HEIGHT);
+    main_view->setSceneRect(-world_wid / 2, -world_hei / 2,
+                            world_wid, world_hei);
 
-    for (int i = 0; i < ANT_DEFAULT_COUNT; ++i) {
-        float rand_x = -VIEW_DEFAULT_WIDTH / 2.0 +
+    for (int i = 0; i < ant_count; ++i) {
+        float rand_x = -world_wid / 2.0 +
                        static_cast<float>(rand()) /
-                           (static_cast<float>(RAND_MAX / VIEW_DEFAULT_WIDTH));
-        float rand_y = -VIEW_DEFAULT_HEIGHT / 2.0 +
+                           (static_cast<float>(RAND_MAX / world_wid));
+        float rand_y = -world_hei / 2.0 +
                        static_cast<float>(rand()) /
-                           (static_cast<float>(RAND_MAX / VIEW_DEFAULT_HEIGHT));
+                           (static_cast<float>(RAND_MAX / world_hei));
         float rand_vx =
-            LO_SPEED +
+            min_speed +
             static_cast<float>(rand()) /
-                (static_cast<float>(RAND_MAX / (HI_SPEED - LO_SPEED)));
+                (static_cast<float>(RAND_MAX / (max_speed - min_speed)));
         float rand_vy =
-            LO_SPEED +
+            min_speed +
             static_cast<float>(rand()) /
-                (static_cast<float>(RAND_MAX / (HI_SPEED - LO_SPEED)));
+                (static_cast<float>(RAND_MAX / (max_speed - min_speed)));
         main_view->add_ant(rand_x, rand_y, rand_vx, rand_vy);
     }
 
     createActions();
     createStatusBar();
-    resize(WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT);
-    move((WINDOW_DEFAULT_WIDTH - width()) / 2,
-         (WINDOW_DEFAULT_HEIGHT - height()) / 2);
+    resize(win_wid, win_hei);
+    move((win_wid - width()) / 2,
+         (win_hei - height()) / 2);
 
     setUnifiedTitleAndToolBarOnMac(true);
 
