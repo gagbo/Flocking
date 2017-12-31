@@ -34,7 +34,7 @@ main(int argc, char *argv[])
     std::cout << argv[0] << " Version " << Flocking_VERSION_MAJOR << "."
               << Flocking_VERSION_MINOR << std::endl;
 
-    srand(static_cast<unsigned>(time(0)));
+    srand(static_cast<unsigned>(time(NULL)));
 
     QApplication app(argc, argv);
     QCoreApplication::setOrganizationName("Gerry A");

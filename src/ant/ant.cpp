@@ -34,7 +34,7 @@
 
 #define SPEED_ZERO_THRESHOLD 0.0001
 #define PI 3.141592653589793
-#define RAD_TO_DEG 180.0 / PI
+#define RAD_TO_DEG (180.0 / PI)
 
 #define CRUISE_SPEED 1500.0
 #define SEPARATION_POTENTIAL_EXP 0.5
@@ -59,6 +59,10 @@ Ant::Ant(int dim) : color(35, 250, 20)
     view_angle = ANT_DEF_VIEW_ANGLE;
     world_wid = 0;
     world_hei = 0;
+
+    // These values are very wrong and should be corrected by the engine
+    vel_angle = 0;
+    time_step = std::numeric_limits<float>::max();
 }
 
 Ant::Ant(const Victor &pos, const Victor &init_speed) : color(250, 250, 20)
@@ -77,6 +81,10 @@ Ant::Ant(const Victor &pos, const Victor &init_speed) : color(250, 250, 20)
     view_angle = ANT_DEF_VIEW_ANGLE;
     world_wid = 0;
     world_hei = 0;
+
+    // These values are very wrong and should be corrected by the engine
+    vel_angle = 0;
+    time_step = std::numeric_limits<float>::max();
 }
 
 Ant::~Ant()
@@ -102,7 +110,7 @@ operator<<(std::ostream &os, const Ant &ant)
 void
 Ant::advance(int phase)
 {
-    if (!phase) {
+    if (phase == 0) {
         return;
     }
 
@@ -119,7 +127,8 @@ Ant::boundingRect() const
 }
 
 void
-Ant::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+Ant::paint(QPainter *painter, const QStyleOptionGraphicsItem *dummy_style_opt,
+           QWidget *dummy_widget)
 {
     // Body
     painter->setBrush(color);
@@ -280,8 +289,9 @@ Ant::decision_separation_velocity() const
     Victor desired(position.is_2d() ? 2 : 3);
 
     foreach (QGraphicsItem *item, neighbour_ants) {
-        if (item == this)
+        if (item == this) {
             continue;
+        }
         Victor to_rival = point_to(dynamic_cast<const Ant &>(*item));
         Victor weighted_diff = -1 * to_rival;
         float dist = weighted_diff.p_norm();
@@ -307,7 +317,7 @@ Ant::decision_alignment_velocity() const
         desired += dynamic_cast<Ant *>(item)->velocity;
     }
 
-    if (considered_neigbours) {
+    if (considered_neigbours > 0) {
         desired /= considered_neigbours;
     }
 
