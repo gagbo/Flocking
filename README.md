@@ -2,6 +2,9 @@
 [![Build Status](https://travis-ci.org/gagbo/Flocking.svg?branch=master)](https://travis-ci.org/gagbo/Flocking)
 [![codecov](https://codecov.io/gh/gagbo/Flocking/branch/master/graph/badge.svg)](https://codecov.io/gh/gagbo/Flocking)
 
+*UPDATE : This project is on hold until the
+[SDL-based version of the project](https://github.com/gagbo/flocking_sdl)
+reaches the same functionnality*
 
 Implementation of Emergence through flocking autonomous agents in C++.
 This little project is inspired by
